@@ -16,8 +16,7 @@ import edu.wpi.first.networktables.GenericEntry;
 
 public class RobotContainer {
     private final Timer timer;
-    private final Joystick joy1;
-    private final Joystick joy2;
+    private final Joystick joy;
     private final PhotonVision photonVision;
     private final Drivetrain drivetrain;
     private final ShuffleboardTab tab;
@@ -28,8 +27,7 @@ public class RobotContainer {
     private final NAVx navx;
 
     public RobotContainer() {
-        joy1 = new Joystick(0);
-        joy2 = new Joystick(1);
+        joy = new Joystick(0);
 
         navx = new NAVx();
         i2cHandler = new I2CHandler();
@@ -48,7 +46,7 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joy2, XboxController.Button.kA.value).onTrue(new InstantCommand(drivetrain :: toggleSlowMode));
+        new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new InstantCommand(drivetrain :: toggleSlowMode));
     }
 
     public void startTeleop(){
@@ -89,8 +87,8 @@ public class RobotContainer {
         // i2cHandler.updatePitch();
         
         // drivetrain.UpdateOdometry();
-        double forward = -joy2.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
-        double turn = joy2.getRawAxis(JOY_Z_AXIS_ID);
+        double forward = -joy.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
+        double turn = joy.getRawAxis(JOY_Z_AXIS_ID);
         drivetrain.TankDrive(forward, turn);
         
         // System.out.println(drivetrain.getEstimatedPose());
