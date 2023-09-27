@@ -33,7 +33,10 @@ public class RobotContainer {
         i2cHandler = new I2CHandler();
         photonVision = new PhotonVision();
         drivetrain = new Drivetrain(photonVision, navx);
-        bunnyCatcher = new BunnyCatcher();
+
+        HardwareBunnyCatcher hardwareBunnyCatcher = new HardwareBunnyCatcher();
+        bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
+        
         tab = Shuffleboard.getTab("SmartDashboard");
         center = tab.add("Are we doing center balacing auto?", false).getEntry();
 
