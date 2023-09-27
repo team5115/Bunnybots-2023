@@ -51,12 +51,12 @@ public class Drivetrain extends SubsystemBase{
     public static final double bA = 10;
     public static final double MaxArea = 0.1;
 
-    public Drivetrain(PhotonVision photonVision, HardwareDrivetrain hardwareDrivetrain, NAVx nav) {
+    public Drivetrain(PhotonVision photonVision, NAVx nav) {
         this.photonVision = photonVision;
         throttle = new ThrottleControl(3, -3, 0.2);
         anglePID = new PIDController(0.019, 0.0001, 0.0012);
         
-        drivetrain = hardwareDrivetrain;
+        drivetrain = new HardwareDrivetrain();
         ramseteController = new RamseteController();
         kinematics = new DifferentialDriveKinematics(Constants.TRACKING_WIDTH_METERS);
         navx = nav;

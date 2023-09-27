@@ -19,6 +19,7 @@ public class RobotContainer {
     private final Joystick joy;
     private final PhotonVision photonVision;
     private final Drivetrain drivetrain;
+    private final BunnyCatcher bunnyCatcher;
     private final ShuffleboardTab tab;
     private final GenericEntry center;
     private AutoCommandGroup autoCommandGroup;
@@ -28,15 +29,11 @@ public class RobotContainer {
 
     public RobotContainer() {
         joy = new Joystick(0);
-
         navx = new NAVx();
         i2cHandler = new I2CHandler();
-
         photonVision = new PhotonVision();
-
-        HardwareDrivetrain hardwareDrivetrain = new HardwareDrivetrain();
-        drivetrain = new Drivetrain(photonVision, hardwareDrivetrain, navx);
-        
+        drivetrain = new Drivetrain(photonVision, navx);
+        bunnyCatcher = new BunnyCatcher();
         tab = Shuffleboard.getTab("SmartDashboard");
         center = tab.add("Are we doing center balacing auto?", false).getEntry();
 
@@ -81,11 +78,12 @@ public class RobotContainer {
     public void autoPeriod() {
        //drivetrain.UpdateOdometry();
         i2cHandler.updatePitch();
+        bunnyCatcher.updateAngle();
     }
 
     public void teleopPeriodic() {
         // i2cHandler.updatePitch();
-        
+        bunnyCatcher.updateAngle();
         // drivetrain.UpdateOdometry();
         double forward = -joy.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
         double turn = joy.getRawAxis(JOY_Z_AXIS_ID);

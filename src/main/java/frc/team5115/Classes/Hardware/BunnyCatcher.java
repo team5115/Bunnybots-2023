@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import frc.team5115.Classes.Acessory.Angle;
 
-public class HardwareBunnyCatcher {
+public class BunnyCatcher {
     static final double positionConversionFactor = 360; // UNKNOWN
     static final double kP = 1.0/360.0;
     static final double MaxSpeed = 1; // degrees per second
@@ -17,9 +17,9 @@ public class HardwareBunnyCatcher {
     final RelativeEncoder encoder;
     final Angle currentAngle;
 
-    public HardwareBunnyCatcher() {
+    public BunnyCatcher() {
         pidController = new PIDController(1.0/360.0, 0, 0);
-        roller = new CANSparkMax(100, MotorType.kBrushless); 
+        roller = new CANSparkMax(100, MotorType.kBrushless);
         encoder = roller.getEncoder();
         encoder.setPositionConversionFactor(positionConversionFactor);
         currentAngle = new Angle(encoder.getPosition());

@@ -86,7 +86,6 @@ public class Angle {
      * @return an equivalent angle
      */
     public static double rollover(double angle, double min) {
-
         return goodModulo(angle - min, 360.0) + min;
     }
 
