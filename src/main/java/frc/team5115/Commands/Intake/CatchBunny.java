@@ -18,6 +18,7 @@ public class CatchBunny extends CommandBase{
         bunnyCatcher.turnTowardsAngle(absoluteSetpoint, 1);
     }
 
+    @Override
     public void end(boolean interrupted) {
         bunnyCatcher.stop();
     }

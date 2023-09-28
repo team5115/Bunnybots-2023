@@ -38,6 +38,7 @@ public class DriveForward extends CommandBase{
         //System.out.println("Right Distance: " + drivetrain.getRightDistance() + "Left Distance: " + drivetrain.getRightDistance());
     }
 
+    @Override
     public void end(boolean interrupted) {
         drivetrain.stop();
     }

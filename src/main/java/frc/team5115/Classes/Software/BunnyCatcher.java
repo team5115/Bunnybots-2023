@@ -1,10 +1,11 @@
 package frc.team5115.Classes.Software;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
 
-public class BunnyCatcher {
+public class BunnyCatcher extends SubsystemBase{
     static final double kP = 1;
     static final double MaxSpeed = 30; // degrees per second
 
