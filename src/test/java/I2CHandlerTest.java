@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import frc.team5115.Classes.Acessory.I2CHandler;
+import frc.team5115.Classes.Accessory.I2CHandler;
 
 public class I2CHandlerTest {   
     @Test

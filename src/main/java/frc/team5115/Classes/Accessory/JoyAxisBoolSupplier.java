@@ -1,4 +1,4 @@
-package frc.team5115.Classes.Acessory;
+package frc.team5115.Classes.Accessory;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.Joystick;

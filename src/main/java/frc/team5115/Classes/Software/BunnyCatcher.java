@@ -1,7 +1,7 @@
 package frc.team5115.Classes.Software;
 
 import edu.wpi.first.math.controller.PIDController;
-import frc.team5115.Classes.Acessory.Angle;
+import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
 
 public class BunnyCatcher {
@@ -16,6 +16,10 @@ public class BunnyCatcher {
         this.hardwareBunnyCatcher = hardwareBunnyCatcher;
         pidController = new PIDController(kP, 0, 0);
         currentAngle = new Angle(hardwareBunnyCatcher.getPosition());
+    }
+
+    public void stop() {
+        hardwareBunnyCatcher.setSpeed(0);
     }
     
     public void turnTowardsAngle(double setpoint, int direction) {
@@ -32,5 +36,9 @@ public class BunnyCatcher {
 
     public void updateAngle() {
         currentAngle.angle = hardwareBunnyCatcher.getPosition();
+    }
+
+    public Angle getAngle() {
+        return currentAngle;
     }
 }

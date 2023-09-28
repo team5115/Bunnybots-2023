@@ -1,4 +1,4 @@
-package frc.team5115.Classes.Acessory;
+package frc.team5115.Classes.Accessory;
 
 /**
  * Everything is in degrees unless specified otherwise. CCW is positive

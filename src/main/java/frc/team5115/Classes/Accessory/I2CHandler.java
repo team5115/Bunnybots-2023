@@ -1,4 +1,4 @@
-package frc.team5115.Classes.Acessory;
+package frc.team5115.Classes.Accessory;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
