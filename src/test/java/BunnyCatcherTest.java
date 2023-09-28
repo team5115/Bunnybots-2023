@@ -10,38 +10,45 @@ public class BunnyCatcherTest {
 
     @Test
     void outputForAllDeltas() {
-        for(int i = 0; i < 361; i++) {
-            double speed = testTurnTowardsAngle(100, 100+(double)i);
-            System.out.println("Delta: " + i + " | Speed: " + speed);
+        //Prints out the speed for all possible deltas of the BunnyCatcher
+        double expected = 0;
+        for(double i = 0; i <= 360; i+=1) {
+            for(double j = 0; j <= 360; j+=1){
+                double speed = testTurnTowardsAngle(i, j);
+                System.out.println("current: " + i + " | setpoint: " + j + " | Delta: " + (j - i) + " | Speed: " + speed);
+                if( (j-i) >= 30 && (j-i) < 180) {
+                    expected = 30;
+                }
+                else if( (j-i) <= -30 && (j-i) >= -180) {
+                    expected = -30;
+                }
+                else if(-30 <= (j-i) && (j-i) <= 30){
+                    expected = j-i;
+                }
+                else if((j-i) >= 180 && (j-i) <= 330){
+                    expected = -30;
+                }
+                else if((j-i) >= 330){
+                    expected = (j-i) - 360;
+                }
+                else if((j-i) < -330 && (j-i) >= -360){
+                    expected = 360 + (j-i);
+                }
+                else if((j-i) < -180){
+                    expected = 30;
+                }
+
+
+                if (speed == -0) {
+                    speed = 0;
+                }
+
+
+                Assertions.assertEquals(expected, speed);
+
+
+            }
         }
-    }
-
-    @Test
-    void testTurnTowardsAngle_BigPositive() {
-        final double expected = +30;
-        final double actual = testTurnTowardsAngle(0, 100);
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    void testTurnTowardsAngle_BigNegative() {
-        final double expected = -30;
-        final double actual = testTurnTowardsAngle(0, -100);
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    void testTurnTowardsAngle_SmallPositive() {
-        final double expected = +10;
-        final double actual = testTurnTowardsAngle(5, 15);
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    void testTurnTowardsAngle_SmallNegative() {
-        final double expected = -10;
-        final double actual = testTurnTowardsAngle(0, -10);
-        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -59,6 +66,7 @@ public class BunnyCatcherTest {
     }
 
     double testTurnTowardsAngle(double current, double setpoint) {
+        //This gives the position of
         mock.setPosition(current);
         bunnyCatcher.updateAngle();
         bunnyCatcher.turnTowardsAngle(setpoint, 0);
