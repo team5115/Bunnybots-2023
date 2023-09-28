@@ -1,4 +1,4 @@
-package frc.team5115.Classes.Acessory;
+package frc.team5115.Classes.Accessory;
 
 /**
  * Main use is to multiply getThrottle() by an input [-1, 1] to get a value that is adjusted based on throttle and slow-mode.
