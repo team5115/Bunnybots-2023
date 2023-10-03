@@ -2,6 +2,7 @@ package frc.team5115.Classes.Software;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareArm;
 import edu.wpi.first.math.controller.PIDController;
 
@@ -29,7 +30,7 @@ public class Arm extends SubsystemBase{
         turnController.setTolerance(TURN_PID_TOLERANCE);
     }
 
-    public void turnSetAngle(double angle){
+    public void setAngle(double angle){
         this.angle = angle;
     }
 
@@ -56,7 +57,6 @@ public class Arm extends SubsystemBase{
     }
 
     public void updateController(){
-        // final double delta = angle - intake.getArmDeg();
         final double pidOutput = turnController.calculate(hardwareArm.getArmDeg(), angle);
         
         if (!turnController.atSetpoint()) {
@@ -72,8 +72,8 @@ public class Arm extends SubsystemBase{
         hardwareArm.stop();
     }
 
-    public double getAngle() {
-        return hardwareArm.getArmDeg();
+    public Angle getAngle() {
+        return new Angle(hardwareArm.getArmDeg());
     }
 
     public void spinIn() {
