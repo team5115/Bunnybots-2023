@@ -11,7 +11,7 @@ import edu.wpi.first.math.MathUtil;
 /**
  * The drivetrain hardware subsystem. Provides methods to interact with the actual hardware of the drivetrain.
  */
-public class HardwareDrivetrain{
+public class SwerveHardwareDrivetrain{
     // Competition feedforward values - 6 inch diameter on KITT comp robot with arm and ballasts
     public final double leftKs = 0.0378;
     public final double leftKv = 2.7479;
@@ -58,7 +58,7 @@ public class HardwareDrivetrain{
 	 * `HardwareDrivetrain` constructor.
 	 * @param arm - The arm subsystem to use
 	 */
-    public HardwareDrivetrain(){
+    public SwerveHardwareDrivetrain(){
         resetEncoders();
         frontRight.setInverted(true);
     }
