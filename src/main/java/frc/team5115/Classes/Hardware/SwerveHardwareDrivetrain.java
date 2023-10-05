@@ -142,6 +142,11 @@ public class HardwareDrivetrain{
         backRight.setVoltage(backRightVoltage);
     }
 
+	// ^^^
+	// What the ****
+	// Why do these have the same names?
+	// ˅˅˅
+
     public void PlugAndVoltDrive(double leftVoltage, double rightVoltage) {
         PlugAndVoltDrive(leftVoltage, rightVoltage, leftVoltage, rightVoltage);
     }
