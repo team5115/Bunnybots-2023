@@ -6,7 +6,9 @@ import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
 
 public class BunnyCatcher extends SubsystemBase{
-    static final double kP = 1;
+    static final double kP = 0.04;
+    static final double kI = 0.0;
+    static final double kD = 0.0004;
     static final double MaxSpeed = 30; // degrees per second
 
     final HardwareBunnyCatcher hardwareBunnyCatcher;
@@ -15,7 +17,7 @@ public class BunnyCatcher extends SubsystemBase{
 
     public BunnyCatcher(HardwareBunnyCatcher hardwareBunnyCatcher) {
         this.hardwareBunnyCatcher = hardwareBunnyCatcher;
-        pidController = new PIDController(kP, 0, 0);
+        pidController = new PIDController(kP, kI, kD);
         currentAngle = new Angle(hardwareBunnyCatcher.getPosition());
     }
 
@@ -24,15 +26,17 @@ public class BunnyCatcher extends SubsystemBase{
     }
     
     public void turnTowardsAngle(double setpoint, int direction) {
-        final Angle goal = new Angle(setpoint);
-        final double delta = currentAngle.getDelta(goal, direction);
+        turnTowardsAngle(new Angle(setpoint), direction);
+    }
+
+    public void turnTowardsAngle(Angle setpoint, int direction) {
+        final double delta = currentAngle.getDelta(setpoint, direction);
         final double current = currentAngle.getDegrees(0);
 
         final double pid = pidController.calculate(current, current + delta);
         final double speed = Math.min(Math.abs(pid), MaxSpeed) * Math.signum(delta);
 
         hardwareBunnyCatcher.setSpeed(speed);
-        // System.out.println("Current: " + current + " | Delta: " + delta + " | Current+Delta: " + (current + delta));
     }
 
     public void updateAngle() {

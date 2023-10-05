@@ -5,6 +5,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team5115.Classes.Accessory.Angle;
 
 /**
  * The NAVx subsystem. Provides methods to interact with the NAVx.
@@ -74,12 +75,8 @@ public class NAVx implements Subsystem {
      * @param angle - The input angle to convert
      * @return The equivalent angle from -180 to 180
      */
-    public static double clampAngle(double angle) {
-        return (goodModulo((angle + 180.0), 360.0)) - 180.0;
-    }
-
-    private static double goodModulo(double a, double b) {
-        return a < 0 ? b + a : a % b;
+    private static double clampAngle(double angle) {
+        return Angle.rollover(angle, -180);
     }
 
 	/**

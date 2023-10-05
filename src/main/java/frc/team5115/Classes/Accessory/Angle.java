@@ -90,6 +90,7 @@ public class Angle {
     }
 
     private static double goodModulo(double a, double b) {
-        return a < 0 ? b + a : a % b;
+        b = Math.abs(b);
+        return (((a % b) + b) % b);
     }
 }

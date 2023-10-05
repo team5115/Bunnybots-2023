@@ -10,6 +10,9 @@ import frc.team5115.Classes.Accessory.I2CHandler;
 import frc.team5115.Classes.Hardware.*;
 import frc.team5115.Classes.Software.*;
 import frc.team5115.Commands.Auto.AutoCommandGroup;
+import frc.team5115.Commands.Intake.CatchBunny;
+import frc.team5115.Commands.Intake.IntakeBerry;
+import frc.team5115.Commands.Intake.MoveArm;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.networktables.GenericEntry;
@@ -26,6 +29,7 @@ public class RobotContainer {
     private boolean centerAuto = false;
     private final I2CHandler i2cHandler;
     private final NAVx navx;
+    // private Arm arm;
 
     public RobotContainer() {
         joy = new Joystick(0);
@@ -35,6 +39,8 @@ public class RobotContainer {
         drivetrain = new Drivetrain(photonVision, navx);
 
         HardwareBunnyCatcher hardwareBunnyCatcher = new HardwareBunnyCatcher();
+        // HardwareArm hardwareArm = new HardwareArm(navx, i2cHandler);
+        // arm = new Arm(hardwareArm);
         bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
         
         tab = Shuffleboard.getTab("SmartDashboard");
@@ -46,7 +52,8 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new InstantCommand(drivetrain :: toggleSlowMode));
+        // new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new InstantCommand(drivetrain :: toggleSlowMode));
+        new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new CatchBunny(bunnyCatcher, 50));
     }
 
     public void startTeleop(){
@@ -88,9 +95,9 @@ public class RobotContainer {
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         // drivetrain.UpdateOdometry();
-        double forward = -joy.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
-        double turn = joy.getRawAxis(JOY_Z_AXIS_ID);
-        drivetrain.TankDrive(forward, turn);
+        // double forward = -joy.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
+        // double turn = joy.getRawAxis(JOY_Z_AXIS_ID);
+        // drivetrain.TankDrive(forward, turn);
         
         // System.out.println(drivetrain.getEstimatedPose());
     }

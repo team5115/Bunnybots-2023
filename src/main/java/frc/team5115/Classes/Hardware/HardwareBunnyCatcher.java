@@ -10,7 +10,7 @@ public class HardwareBunnyCatcher {
     final RelativeEncoder encoder;
 
     public HardwareBunnyCatcher() {
-        roller = new CANSparkMax(100, MotorType.kBrushless);
+        roller = new CANSparkMax(5, MotorType.kBrushless);
         encoder = roller.getEncoder();
         encoder.setPositionConversionFactor(positionConversionFactor);
     }

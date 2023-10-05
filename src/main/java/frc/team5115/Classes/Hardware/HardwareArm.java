@@ -11,6 +11,7 @@ import com.revrobotics.SparkMaxRelativeEncoder;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Accessory.I2CHandler;
 
 public class HardwareArm extends SubsystemBase{
@@ -28,13 +29,13 @@ public class HardwareArm extends SubsystemBase{
     private final ArmFeedforward arm = new ArmFeedforward(Ks, Kg, Kv, Ka); // Rad Calibrated
 
     public HardwareArm(NAVx navx, I2CHandler i2c){
-        grabLeft = new TalonSRX(120);
-        grabRight = new TalonSRX(121);
+        grabLeft = new TalonSRX(2);
+        grabRight = new TalonSRX(4);
 
         this.navx = navx;
         this.i2c = i2c;
 
-        intakeTurn = new CANSparkMax(7, MotorType.kBrushless);  
+        intakeTurn = new CANSparkMax(5, MotorType.kBrushless);  
         intakeTurn.setIdleMode(IdleMode.kBrake);
         intakeTurn.setSmartCurrentLimit(80, 80);
     }
@@ -82,7 +83,7 @@ public class HardwareArm extends SubsystemBase{
     private double angleFromSensors() {
         final double navxPitch = navx.getPitchDeg();
         final double bnoPitch = i2c.getPitch();
-        return NAVx.clampAngle(bnoPitch - navxPitch);
+        return Angle.rollover(bnoPitch - navxPitch, -180);
     }
 
     public double getArmRad(){
