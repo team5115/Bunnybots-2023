@@ -79,13 +79,12 @@ public class RobotContainer {
         if(autoCommandGroup != null) {
             autoCommandGroup.cancel();
         }
-        // else autoCommandGroup.schedule();
         drivetrain.resetEncoders();
         drivetrain.resetNAVx();
         drivetrain.stop();
         centerAuto = center.getBoolean(false);
         System.out.println("Good auto? " + centerAuto + "!!!!!!!");
-        
+        autoCommandGroup.schedule();
     }
 
     public void autoPeriod() {
