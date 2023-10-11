@@ -20,6 +20,7 @@ public class CatchBunny extends CommandBase{
 
     @Override
     public void execute() {
+        System.out.println("COMMAND EXECUTED");
         bunnyCatcher.turnTowardsAngle(absoluteSetpoint, 1);
     }
 
