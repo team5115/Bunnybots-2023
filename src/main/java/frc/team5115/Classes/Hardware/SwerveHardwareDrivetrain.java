@@ -1,11 +1,21 @@
 package frc.team5115.Classes.Hardware;
 
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.team5115.Constants.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import edu.wpi.first.math.controller.*;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.math.MathUtil;
 
 /**
@@ -50,6 +60,16 @@ public class SwerveHardwareDrivetrain{
     private final CANSparkMax frontRight = new CANSparkMax(FRONT_RIGHT_MOTOR_ID, MotorType.kBrushless);
     private final CANSparkMax backLeft = new CANSparkMax(BACK_LEFT_MOTOR_ID, MotorType.kBrushless);
     private final CANSparkMax backRight = new CANSparkMax(BACK_RIGHT_MOTOR_ID, MotorType.kBrushless);
+
+    private final CANSparkMax frontLeftTurn = new CANSparkMax(FRONT_LEFT_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax frontRightTurn = new CANSparkMax(FRONT_RIGHT_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax backLeftTurn = new CANSparkMax(BACK_LEFT_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax backRightTurn = new CANSparkMax(BACK_RIGHT_MOTOR_ID, MotorType.kBrushless);
+
+    private final DutyCycleEncoder frontLeftTurnEncoder = new DutyCycleEncoder(BACK_LEFT_MOTOR_ID);
+    private final DutyCycleEncoder frontRightTurnEncoder = new DutyCycleEncoder(BACK_LEFT_MOTOR_ID);
+    private final DutyCycleEncoder backLeftTurnEncoder = new DutyCycleEncoder(BACK_LEFT_MOTOR_ID);
+    private final DutyCycleEncoder backRightTurnEncoder = new DutyCycleEncoder(BACK_LEFT_MOTOR_ID);
 
     private final RelativeEncoder leftEncoder = frontLeft.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
     private final RelativeEncoder rightEncoder = frontRight.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
@@ -127,12 +147,8 @@ public class SwerveHardwareDrivetrain{
      * @param backLeftSpeed - The speed of the back left motor     
      * @param backRightSpeed - The speed of the back right motor
      */
-    @Deprecated
-    public void plugAndChugDrive(double frontLeftSpeed, double frontRightSpeed, double backLeftSpeed, double backRightSpeed){
-        frontLeft.set(frontLeftSpeed);
-        frontRight.set(frontRightSpeed);
-        backLeft.set(backLeftSpeed);
-        backRight.set(backRightSpeed);
+    public void plugAndChugDrive(SwerveModuleState[] x){
+        x[0].angle.getDegrees();
     }
 
     public void PlugAndVoltDrive(double frontLeftVoltage, double frontRightVoltage, double backLeftVoltage, double backRightVoltage){

@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 
 public class Constants{
 
@@ -51,7 +53,52 @@ public class Constants{
         public static final Rotation2d startAngle = Rotation2d.fromDegrees(startAngleDeg);
     }
 
-     public static class VisionConstants {
+    public static class SwerveConstants{
+        public static final int DrivingMotorPinionTeeth = 14;
+
+        // Invert the turning encoder, since the output shaft rotates in the opposite direction of
+        // the steering motor in the MAXSwerve Module.
+        public static final boolean TurningEncoderInverted = true;
+    
+        // Calculations required for driving motor conversion factors and feed forward
+        public static final double WheelDiameterMeters = 0.0762;
+        public static final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
+        // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
+        public static final double DrivingMotorReduction = (45.0 * 22) / (DrivingMotorPinionTeeth * 15);
+    
+        public static final double DrivingEncoderPositionFactor = (WheelDiameterMeters * Math.PI)
+            / DrivingMotorReduction; // meters
+        public static final double DrivingEncoderVelocityFactor = ((WheelDiameterMeters * Math.PI)
+            / DrivingMotorReduction) / 60.0; // meters per second
+    
+        public static final double TurningEncoderPositionFactor = (2 * Math.PI); // radians
+        public static final double TurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
+    
+        public static final double TurningEncoderPositionPIDMinInput = 0; // radians
+        public static final double TurningEncoderPositionPIDMaxInput = TurningEncoderPositionFactor; // radians
+    
+        public static final double DrivingP = 0.04;
+        public static final double DrivingI = 0;
+        public static final double DrivingD = 0;
+        public static final double DrivingFF = 1;
+        public static final double DrivingMinOutput = -1;
+        public static final double DrivingMaxOutput = 1;
+    
+        public static final double TurningP = 1;
+        public static final double TurningI = 0;
+        public static final double TurningD = 0;
+        public static final double TurningFF = 0;
+        public static final double TurningMinOutput = -1;
+        public static final double TurningMaxOutput = 1;
+    
+        public static final IdleMode DrivingMotorIdleMode = IdleMode.kBrake;
+        public static final IdleMode TurningMotorIdleMode = IdleMode.kBrake;
+    
+        public static final int DrivingMotorCurrentLimit = 50; // amps
+        public static final int TurningMotorCurrentLimit = 20; // amps 
+    }
+
+    public static class VisionConstants {
         public static final String leftCameraName = "HD_USB_Camera";
         public static final String rightCameraName = null;
 
