@@ -42,7 +42,6 @@ public class Drivetrain extends SubsystemBase{
     private final RamseteController ramseteController;
     private final DifferentialDriveKinematics kinematics;
     private final HardwareDrivetrain drivetrain;
-    private final SwerveHardwareDrivetrain swerveDrivetrain;
     private final NAVx navx;
     private final PhotonVision photonVision;
     private DifferentialDrivePoseEstimator poseEstimator;
@@ -60,7 +59,6 @@ public class Drivetrain extends SubsystemBase{
         this.photonVision = photonVision;
         throttle = new ThrottleControl(3, -3, 0.2);
         anglePID = new PIDController(0.019, 0.0001, 0.0012);
-        swerveDrivetrain = new SwerveHardwareDrivetrain();
         drivetrain = new HardwareDrivetrain();
         ramseteController = new RamseteController();
         kinematics = new DifferentialDriveKinematics(Constants.TRACKING_WIDTH_METERS);
@@ -179,7 +177,7 @@ public class Drivetrain extends SubsystemBase{
         moduleStates = swervekinematics.toSwerveModuleStates(speeds);
 
         // Front left module state
-        swerveDrivetrain.plugAndChugDrive(moduleStates);
+       // drivetrain.plugAndChugDrive(moduleStates);
     }
 
     public boolean TankDriveToAngle(double angleDegrees) { 
