@@ -13,12 +13,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.ThrottleControl;
-import frc.team5115.Classes.Hardware.HardwareDrivetrain;
+import frc.team5115.Classes.Hardware.*;
 import frc.team5115.Classes.Hardware.NAVx;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -40,10 +42,13 @@ public class Drivetrain extends SubsystemBase{
     private final RamseteController ramseteController;
     private final DifferentialDriveKinematics kinematics;
     private final HardwareDrivetrain drivetrain;
+    private final SwerveHardwareDrivetrain swerveDrivetrain;
     private final NAVx navx;
     private final PhotonVision photonVision;
     private DifferentialDrivePoseEstimator poseEstimator;
     private double leftSpeed;
+    SwerveModuleState[] moduleStates;
+    SwerveDriveKinematics swervekinematics;
     private double rightSpeed;
 
     public static final double kD = 0.25;
@@ -55,7 +60,7 @@ public class Drivetrain extends SubsystemBase{
         this.photonVision = photonVision;
         throttle = new ThrottleControl(3, -3, 0.2);
         anglePID = new PIDController(0.019, 0.0001, 0.0012);
-        
+        swerveDrivetrain = new SwerveHardwareDrivetrain();
         drivetrain = new HardwareDrivetrain();
         ramseteController = new RamseteController();
         kinematics = new DifferentialDriveKinematics(Constants.TRACKING_WIDTH_METERS);
@@ -167,6 +172,16 @@ public class Drivetrain extends SubsystemBase{
         return new double[] {x, y};
     }
     
+    public void SwerveDrive(double forward, double turn, double right){
+        ChassisSpeeds speeds = new ChassisSpeeds(forward, right, turn);
+
+        // Convert to module states
+        moduleStates = swervekinematics.toSwerveModuleStates(speeds);
+
+        // Front left module state
+        swerveDrivetrain.plugAndChugDrive(moduleStates);
+    }
+
     public boolean TankDriveToAngle(double angleDegrees) { 
         double rotationDegrees = navx.getYawDeg();
         System.out.println("remaining degrees: " + (rotationDegrees-angleDegrees));
