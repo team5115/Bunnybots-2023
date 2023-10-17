@@ -19,7 +19,11 @@ public class HardwareBunnyCatcher {
         return encoder.getPosition();
     }
 
+    /**
+     * 
+     * @param speed in degrees per second
+     */
     public void setSpeed(double speed) {
-        roller.set(speed);
+        roller.set(speed / 360.0);
     }
 }
