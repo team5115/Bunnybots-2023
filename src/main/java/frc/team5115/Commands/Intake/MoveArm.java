@@ -6,17 +6,17 @@ import frc.team5115.Classes.Software.Arm;
 
 public class MoveArm extends CommandBase{
     private Arm arm;
-    private double absoluteSetpoint;
+    private Angle absoluteSetpoint;
     private double distToStop = 1;
     
-    public MoveArm(double absoluteSetpoint, Arm arm) {
+    public MoveArm(Angle absoluteSetpoint, Arm arm) {
         this.absoluteSetpoint = absoluteSetpoint;
         this.arm = arm;
     }
 
     @Override
     public void execute() {
-        arm.setAngle(absoluteSetpoint);
+        arm.setSetpoint(absoluteSetpoint);
         arm.updateController();
     }
 
@@ -27,6 +27,6 @@ public class MoveArm extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return new Angle(absoluteSetpoint).getDelta(arm.getAngle()) < distToStop;
+        return absoluteSetpoint.getDelta(arm.getSetpoint()) < distToStop;
     }
 }

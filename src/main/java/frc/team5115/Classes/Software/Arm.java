@@ -10,13 +10,14 @@ import edu.wpi.first.math.controller.PIDController;
  * The arm subsystem. Provides methods for controlling and getting information about the arm.
  */
 public class Arm extends SubsystemBase{
-    private static final double TURN_PID_TOLERANCE = 0;
+    private static final double MIN_DEGREES = -180.0;
+    private static final double TURN_PID_TOLERANCE = 0.0;
     private static final double TURN_PID_KP = 0.04;
     private static final double TURN_PID_KI = 0.0;
     private static final double TURN_PID_KD = 0.0004;
     
     private HardwareArm hardwareArm;
-    private double angle = -90;
+    private Angle setpoint = new Angle(-90);
 
     private PIDController turnController = new PIDController(TURN_PID_KP, TURN_PID_KI, TURN_PID_KD);
 
@@ -30,16 +31,16 @@ public class Arm extends SubsystemBase{
         turnController.setTolerance(TURN_PID_TOLERANCE);
     }
 
-    public void setAngle(double angle){
-        this.angle = angle;
+    public void setSetpoint(Angle setpoint){
+        this.setpoint = setpoint;
     }
 
     public void turnUp() {
-        angle += 9*0.02;
+        setpoint.angle += 9*0.02;
     }
 
     public void turnDown() {
-        angle -= 9*0.02;
+        setpoint.angle -= 9*0.02;
     }
 
     /**
@@ -57,7 +58,7 @@ public class Arm extends SubsystemBase{
     }
 
     public void updateController(){
-        final double pidOutput = turnController.calculate(hardwareArm.getArmDeg(), angle);
+        final double pidOutput = turnController.calculate(getSetpoint().getDegrees(MIN_DEGREES), setpoint.getDegrees(MIN_DEGREES));
         
         if (!turnController.atSetpoint()) {
             hardwareArm.setTurn(pidOutput);
@@ -72,8 +73,8 @@ public class Arm extends SubsystemBase{
         hardwareArm.stop();
     }
 
-    public Angle getAngle() {
-        return new Angle(hardwareArm.getArmDeg());
+    public Angle getSetpoint() {
+        return hardwareArm.getArmAngle();
     }
 
     public void spinIn() {
@@ -85,6 +86,6 @@ public class Arm extends SubsystemBase{
     }
 
     public void spinStop() {
-        hardwareArm.spinGrabbers(+0.09);
+        hardwareArm.spinGrabbers(+0.0);
     }
 }

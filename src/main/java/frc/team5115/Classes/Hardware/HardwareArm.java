@@ -51,7 +51,7 @@ public class HardwareArm extends SubsystemBase{
         if(speed != speed) {
             speed = 0;
         }
-        intakeTurn.setVoltage(Math.max(arm.calculate((getArmRad()), 1.5*speed), -10));
+        intakeTurn.setVoltage(Math.max(arm.calculate(getArmAngle().getRadians(-Math.PI), 1.5*speed), -10));
     }
 
     public void stop(){
@@ -66,28 +66,15 @@ public class HardwareArm extends SubsystemBase{
         return intakeTurn.getFault(f);
     }
 
-    /** 
-     * Returns the angle of the turning arm
-     * @return the angle the arm turned
-     */
-
-    public double getArmDeg(){
-        // return getTurnEncoder() * (360.0 / (48.0 * 49.0 / 10.0));
-        return angleFromSensors();
-    }
-
+    
     /**
      * This uses the navx and the bno to get the arm degree instead of motor encoder
-     * @return the angle the arm is at in degrees relative to the horizontal
+     * @return the angle the arm is at relative to the horizontal
      */
-    private double angleFromSensors() {
+    public Angle getArmAngle(){
         final double navxPitch = navx.getPitchDeg();
         final double bnoPitch = i2c.getPitch();
-        return Angle.rollover(bnoPitch - navxPitch, -180);
-    }
-
-    public double getArmRad(){
-        return Math.toRadians(getArmDeg());
+        return new Angle(bnoPitch - navxPitch);
     }
 
     public void disableBrake(){
