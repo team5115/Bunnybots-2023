@@ -176,6 +176,8 @@ public class Drivetrain extends SubsystemBase{
         // Convert to module states
         moduleStates = swervekinematics.toSwerveModuleStates(speeds);
 
+        drivetrain.setModuleStates(moduleStates);
+
         // Front left module state
        // drivetrain.plugAndChugDrive(moduleStates);
     }
