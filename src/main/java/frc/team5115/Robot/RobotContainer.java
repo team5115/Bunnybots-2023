@@ -18,18 +18,16 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.networktables.GenericEntry;
 
 public class RobotContainer {
-    private final Timer timer;
     private final Joystick joy;
     private final PhotonVision photonVision;
     private final Drivetrain drivetrain;
     private final BunnyCatcher bunnyCatcher;
-    private final ShuffleboardTab tab;
-    private final GenericEntry center;
-    private AutoCommandGroup autoCommandGroup;
-    private boolean centerAuto = false;
+    private final ShuffleboardTab shuffleboardTab;
+    private final GenericEntry pathChooser;
     private final I2CHandler i2cHandler;
     private final NAVx navx;
-    // private Arm arm;
+    private final Arm arm;
+    private AutoCommandGroup autoCommandGroup;
 
     public RobotContainer() {
         joy = new Joystick(0);
@@ -39,27 +37,25 @@ public class RobotContainer {
         drivetrain = new Drivetrain(photonVision, navx);
 
         HardwareBunnyCatcher hardwareBunnyCatcher = new HardwareBunnyCatcher();
-        // HardwareArm hardwareArm = new HardwareArm(navx, i2cHandler);
-        // arm = new Arm(hardwareArm);
+        HardwareArm hardwareArm = new HardwareArm(navx, i2cHandler);
+        
+        arm = new Arm(hardwareArm);
         bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
         
-        tab = Shuffleboard.getTab("SmartDashboard");
-        center = tab.add("Are we doing center balacing auto?", false).getEntry();
+        shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
+        pathChooser = shuffleboardTab.add("Are we doing the outside auto?", false).getEntry();
 
-        timer = new Timer();
-        timer.reset();
         configureButtonBindings();
     }
 
     public void configureButtonBindings() {
-        // new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new InstantCommand(drivetrain :: toggleSlowMode));
+        new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new InstantCommand(drivetrain :: toggleSlowMode));
         new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new CatchBunny(bunnyCatcher, 50));
     }
 
     public void startTeleop(){
         drivetrain.init();
         if(autoCommandGroup != null) autoCommandGroup.cancel();
-        // arm.zeroArm();
         
         System.out.println("Starting teleop");
         drivetrain.resetEncoders();
@@ -67,12 +63,11 @@ public class RobotContainer {
 
     public void disabledInit(){
         drivetrain.stop();
-        // i2cHandler.Disable();
     }
 
     public void stopEverything(){
         drivetrain.stop();
-        // arm.stop();
+        arm.stop();
     }
 
     public void startAuto(){
@@ -82,21 +77,25 @@ public class RobotContainer {
         drivetrain.resetEncoders();
         drivetrain.resetNAVx();
         drivetrain.stop();
-        centerAuto = center.getBoolean(false);
-        System.out.println("Good auto? " + centerAuto + "!!!!!!!");
+
+        boolean doOutsidePath = pathChooser.getBoolean(false);
+        System.out.println("Do outside path? " + doOutsidePath + "@@@@@@@@@@@");
+
+        autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath);
         autoCommandGroup.schedule();
     }
 
     public void autoPeriod() {
-       //drivetrain.UpdateOdometry();
-        i2cHandler.updatePitch();
+        // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
+        //drivetrain.UpdateOdometry();
     }
 
     public void teleopPeriodic() {
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         // drivetrain.UpdateOdometry();
+
         // double forward = -joy.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
         // double turn = joy.getRawAxis(JOY_Z_AXIS_ID);
         // drivetrain.TankDrive(forward, turn);

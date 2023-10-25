@@ -70,8 +70,7 @@ public class I2CHandler extends SubsystemBase {
         return combineBytes(buffer);
     }
 
-    public void Disable() {
+    public void disable() {
         i2c.close();
     }
-    
 }

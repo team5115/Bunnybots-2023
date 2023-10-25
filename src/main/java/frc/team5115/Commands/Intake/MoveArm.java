@@ -8,16 +8,17 @@ public class MoveArm extends CommandBase{
     private Arm arm;
     private Angle absoluteSetpoint;
     private double distToStop = 1;
+    private boolean atSetpoint;
     
     public MoveArm(Angle absoluteSetpoint, Arm arm) {
         this.absoluteSetpoint = absoluteSetpoint;
         this.arm = arm;
+        arm.setSetpoint(absoluteSetpoint);
     }
 
     @Override
     public void execute() {
-        arm.setSetpoint(absoluteSetpoint);
-        arm.updateController();
+        atSetpoint = arm.updateController();
     }
 
     @Override
@@ -27,6 +28,7 @@ public class MoveArm extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return absoluteSetpoint.getDelta(arm.getSetpoint()) < distToStop;
+        // confirm that PID is done AND it matches this commands requirements for finishing
+        return atSetpoint && absoluteSetpoint.getDelta(arm.getAngle()) < distToStop;
     }
 }
