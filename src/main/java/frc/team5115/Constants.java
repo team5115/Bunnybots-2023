@@ -5,6 +5,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -49,9 +53,18 @@ public class Constants{
 
     public static final double TARGET_ANGLE = 1;
 
+    public static final class Paths{
+
+        private static final PathConstraints constraints = new PathConstraints(4, 3);
+
+        public static final PathPlannerTrajectory denToYardInside = PathPlanner.loadPath("Den to Yard Inside", constraints);
+        public static final PathPlannerTrajectory denToYardOutside = PathPlanner.loadPath("Den to Yard Outside", constraints);
+
+    }
+
     // Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+    // Open Source Software; you can modify and/or share it under the terms of
+    // the WPILib BSD license file in the root directory of this project.
 
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -92,6 +105,8 @@ public class Constants{
     public static final int kRearRightTurningCanId = 16;
 
     public static final boolean kGyroReversed = false;
+
+
   }
     public static class SwerveConstants{
         public static final int DrivingMotorPinionTeeth = 14;
@@ -164,5 +179,6 @@ public class Constants{
         public static final Transform3d robotToCamR = new Transform3d( new Translation3d(+cameraPosX, -cameraPosY, cameraPosZ), new Rotation3d(cameraRoll, cameraPitch, -cameraYaw)); 
         
     }
+
 
 }
