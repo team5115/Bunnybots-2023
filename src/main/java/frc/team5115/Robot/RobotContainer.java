@@ -95,9 +95,10 @@ public class RobotContainer {
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         // drivetrain.UpdateOdometry();
+        drivetrain.SwerveDrive(-joy.getRawAxis(JOY_Y_AXIS_ID), joy.getRawAxis(JOY_X_AXIS_ID), joy.getRawAxis(JOY_Z_AXIS_ID));
 
         // double forward = -joy.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
-        // double turn = joy.getRawAxis(JOY_Z_AXIS_ID);
+        // double turn = ;
         // drivetrain.TankDrive(forward, turn);
         
         // System.out.println(drivetrain.getEstimatedPose());
