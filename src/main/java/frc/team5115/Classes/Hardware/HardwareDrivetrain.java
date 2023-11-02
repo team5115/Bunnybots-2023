@@ -64,10 +64,10 @@ public class HardwareDrivetrain{
     private final PIDController leftPID = new PIDController(leftKp, Ki, Kd);
     private final PIDController rightPID = new PIDController(rightKp, Ki, Kd);
 
-    private final CANSparkMax frontLeftOld = new CANSparkMax(FRONT_LEFT_MOTOR_ID, MotorType.kBrushless);
-    private final CANSparkMax frontRightOld = new CANSparkMax(FRONT_RIGHT_MOTOR_ID, MotorType.kBrushless);
-    private final CANSparkMax backLeftOld = new CANSparkMax(BACK_LEFT_MOTOR_ID, MotorType.kBrushless);
-    private final CANSparkMax backRightOld = new CANSparkMax(BACK_RIGHT_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax frontLeftOld = new CANSparkMax(FRONT_LEFT_MOTOR_ID+1, MotorType.kBrushless);
+    private final CANSparkMax frontRightOld = new CANSparkMax(FRONT_RIGHT_MOTOR_ID+1, MotorType.kBrushless);
+    private final CANSparkMax backLeftOld = new CANSparkMax(BACK_LEFT_MOTOR_ID+1, MotorType.kBrushless);
+    private final CANSparkMax backRightOld = new CANSparkMax(BACK_RIGHT_MOTOR_ID+1, MotorType.kBrushless);
 
     private final RelativeEncoder leftEncoder = frontLeftOld.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
     private final RelativeEncoder rightEncoder = frontRightOld.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
