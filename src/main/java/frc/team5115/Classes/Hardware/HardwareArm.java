@@ -12,7 +12,7 @@ import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Accessory.I2CHandler;
 
 public class HardwareArm extends SubsystemBase{
-    private final CANSparkMax intakeTurn;
+    private final CANSparkMax armTurn;
     private final TalonSRX grabLeft;
     private final TalonSRX grabRight;
     
@@ -32,9 +32,9 @@ public class HardwareArm extends SubsystemBase{
         this.navx = navx;
         this.i2c = i2c;
 
-        intakeTurn = new CANSparkMax(5, MotorType.kBrushless);  
-        intakeTurn.setIdleMode(IdleMode.kBrake);
-        intakeTurn.setSmartCurrentLimit(80, 80);
+        armTurn = new CANSparkMax(50, MotorType.kBrushless);  
+        armTurn.setIdleMode(IdleMode.kBrake);
+        armTurn.setSmartCurrentLimit(80, 80);
     }
 
     public void spinGrabbers(double speedNormalized) {
@@ -46,7 +46,7 @@ public class HardwareArm extends SubsystemBase{
         if(speed != speed) {
             speed = 0;
         }
-        intakeTurn.setVoltage(Math.max(arm.calculate(getArmAngle().getRadians(-Math.PI), 1.5*speed), -10));
+        armTurn.setVoltage(Math.max(arm.calculate(getArmAngle().getRadians(-Math.PI), 1.5*speed), -10));
     }
 
     public void stop(){
@@ -54,11 +54,11 @@ public class HardwareArm extends SubsystemBase{
     }
     
     public double getTurnCurrent(){
-        return intakeTurn.getOutputCurrent();
+        return armTurn.getOutputCurrent();
     }
     
     public boolean getFault(CANSparkMax.FaultID f){
-        return intakeTurn.getFault(f);
+        return armTurn.getFault(f);
     }
 
     
@@ -77,6 +77,6 @@ public class HardwareArm extends SubsystemBase{
     }
 
     public void enableBrake(){
-        intakeTurn.setIdleMode(IdleMode.kBrake);
+        armTurn.setIdleMode(IdleMode.kBrake);
     }
 }

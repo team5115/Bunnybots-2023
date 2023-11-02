@@ -50,7 +50,7 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new InstantCommand(drivetrain :: toggleSlowMode));
-        new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new CatchBunny(bunnyCatcher, 50));
+        new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new CatchBunny(bunnyCatcher, 90, 1));
     }
 
     public void startTeleop(){
