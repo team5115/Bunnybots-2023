@@ -54,23 +54,23 @@ public class HardwareDrivetrain{
     private final double Kd = 0.1;
     // END of testbed values
 
-    SwerveDriveModule frontLeft = new SwerveDriveModule(FRONT_LEFT_MOTOR_ID, FRONT_LEFT_TURN_MOTOR_ID, 0);
-    SwerveDriveModule frontRight = new SwerveDriveModule(FRONT_RIGHT_MOTOR_ID, FRONT_RIGHT_TURN_MOTOR_ID, 0);
+    SwerveDriveModule frontLeft = new SwerveDriveModule(FRONT_LEFT_MOTOR_ID, FRONT_LEFT_TURN_MOTOR_ID, Math.toRadians(90));
+    SwerveDriveModule frontRight = new SwerveDriveModule(FRONT_RIGHT_MOTOR_ID, FRONT_RIGHT_TURN_MOTOR_ID, Math.toRadians(180));
     SwerveDriveModule backLeft = new SwerveDriveModule(BACK_LEFT_MOTOR_ID,BACK_LEFT_TURN_MOTOR_ID, 0);
-    SwerveDriveModule backRight = new SwerveDriveModule(BACK_RIGHT_MOTOR_ID, BACK_RIGHT_TURN_MOTOR_ID, 0);
+    SwerveDriveModule backRight = new SwerveDriveModule(BACK_RIGHT_MOTOR_ID, BACK_RIGHT_TURN_MOTOR_ID, Math.toRadians(270));
 
     private final SimpleMotorFeedforward leftFeedForward = new SimpleMotorFeedforward(leftKs, leftKv, leftKa);
     private final SimpleMotorFeedforward rightFeedForward = new SimpleMotorFeedforward(rightKs, rightKv, rightKa);
     private final PIDController leftPID = new PIDController(leftKp, Ki, Kd);
     private final PIDController rightPID = new PIDController(rightKp, Ki, Kd);
 
-    private final CANSparkMax frontLeftOld = new CANSparkMax(FRONT_LEFT_MOTOR_ID+100, MotorType.kBrushless);
-    private final CANSparkMax frontRightOld = new CANSparkMax(FRONT_RIGHT_MOTOR_ID+100, MotorType.kBrushless);
-    private final CANSparkMax backLeftOld = new CANSparkMax(BACK_LEFT_MOTOR_ID+100, MotorType.kBrushless);
-    private final CANSparkMax backRightOld = new CANSparkMax(BACK_RIGHT_MOTOR_ID+100, MotorType.kBrushless);
+    //private final CANSparkMax frontLeftOld = new CANSparkMax(FRONT_LEFT_MOTOR_ID+100, MotorType.kBrushless);
+    //private final CANSparkMax frontRightOld = new CANSparkMax(FRONT_RIGHT_MOTOR_ID+100, MotorType.kBrushless);
+    //private final CANSparkMax backLeftOld = new CANSparkMax(BACK_LEFT_MOTOR_ID+100, MotorType.kBrushless);
+    //private final CANSparkMax backRightOld = new CANSparkMax(BACK_RIGHT_MOTOR_ID+100, MotorType.kBrushless);
 
-    private final RelativeEncoder leftEncoder = frontLeftOld.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
-    private final RelativeEncoder rightEncoder = frontRightOld.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+    //private final RelativeEncoder leftEncoder = frontLeftOld.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+   // private final RelativeEncoder rightEncoder = frontRightOld.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
 
       // Slew rate filter variables for controlling lateral acceleration
     private double m_currentRotation = 0.0;
@@ -98,7 +98,7 @@ public class HardwareDrivetrain{
 	 */
     public HardwareDrivetrain(){
         resetEncoders();
-        frontRightOld.setInverted(true);
+        //frontRightOld.setInverted(true);
     }
 
   public void periodic() {
@@ -269,26 +269,14 @@ public class HardwareDrivetrain{
      * @param motorID - The ID of the motor to get an encoder of.
      * @return A reference to an encoder matching the id
      */
-    public RelativeEncoder getEncoder(int motorID){
-        switch (motorID) {
-            case BACK_LEFT_MOTOR_ID:
-            case FRONT_LEFT_MOTOR_ID:
-                return leftEncoder;
-            
-            case BACK_RIGHT_MOTOR_ID:
-            case FRONT_RIGHT_MOTOR_ID:
-                return rightEncoder;
-                
-            default:
-                throw new Error("Encoder ID " + motorID + " is invalid!");
-        }
-    }
+    
 
 	/**
 	 * @param motorID - The ID of the motor to get the encoder distance of
 	 * @return The distance traveled by the motor of the given ID
 	 */
     public double getEncoderDistance(int motorID){
+        /* 
         switch (motorID) {
             case BACK_LEFT_MOTOR_ID:
             case FRONT_LEFT_MOTOR_ID:
@@ -301,6 +289,8 @@ public class HardwareDrivetrain{
             default:
                 throw new Error("Encoder ID " + motorID + " is invalid!");
         }
+        */
+        return 0.0;
     }
 
 	/**
@@ -308,6 +298,7 @@ public class HardwareDrivetrain{
 	 * @return The velocity of the motor of the given ID
 	 */
     public Double getEncoderVelocity(int motorID){
+        /* 
         switch (motorID) {
             case BACK_LEFT_MOTOR_ID:
             case FRONT_LEFT_MOTOR_ID:
@@ -320,6 +311,8 @@ public class HardwareDrivetrain{
             default:
                 throw new Error("Encoder ID " + motorID + " is invalid!");
         }
+        */
+        return 0.0;
     }
 
     /**
@@ -329,19 +322,24 @@ public class HardwareDrivetrain{
      * @param backLeftOldSpeed - The speed of the back left motor     
      * @param backRightOldSpeed - The speed of the back right motor
      */
+    
     @Deprecated
     public void plugAndChugDrive(double frontLeftOldSpeed, double frontRightOldSpeed, double backLeftOldSpeed, double backRightOldSpeed){
+        /* 
         frontLeftOld.set(frontLeftOldSpeed);
         frontRightOld.set(frontRightOldSpeed);
         backLeftOld.set(backLeftOldSpeed);
         backRightOld.set(backRightOldSpeed);
+        */
     }
 
     public void PlugAndVoltDrive(double frontLeftOldVoltage, double frontRightOldVoltage, double backLeftOldVoltage, double backRightOldVoltage){
+        /* 
         frontLeftOld.setVoltage(frontLeftOldVoltage);
         frontRightOld.setVoltage(frontRightOldVoltage);
         backLeftOld.setVoltage(backLeftOldVoltage);
         backRightOld.setVoltage(backRightOldVoltage);
+        */
     }
 
     public void PlugAndVoltDrive(double leftVoltage, double rightVoltage) {
@@ -380,10 +378,12 @@ public class HardwareDrivetrain{
         if(Math.abs(leftSpeed) < 0.05) leftVoltage = 0;
         if(Math.abs(rightSpeed) < 0.05) rightVoltage = 0;
 
+        /* 
         backLeftOld.follow(frontLeftOld);
         backRightOld.follow(frontRightOld);
         frontLeftOld.setVoltage(leftVoltage);
         frontRightOld.setVoltage(rightVoltage);
+        */
     }
 
     private double getAccelerationLimit() {
@@ -391,10 +391,12 @@ public class HardwareDrivetrain{
     }
 
     public double getLeftVelocity() {
-        return leftEncoder.getVelocity() * NEO_VELOCITY_CALIBRATION;
+        //return leftEncoder.getVelocity() * NEO_VELOCITY_CALIBRATION;
+        return 0.0;
     }
 
     public double getRightVelocity() {
-        return rightEncoder.getVelocity() * NEO_VELOCITY_CALIBRATION;
+        //return rightEncoder.getVelocity() * NEO_VELOCITY_CALIBRATION;
+        return 0.0;
     }
 }
