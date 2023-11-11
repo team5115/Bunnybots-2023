@@ -28,6 +28,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The drivetrain subsystem. Provides a number of high-complexity utility functions for interacting with the drivetrain.
@@ -47,7 +48,7 @@ public class Drivetrain extends SubsystemBase{
     private DifferentialDrivePoseEstimator poseEstimator;
     private double leftSpeed;
     SwerveModuleState[] moduleStates;
-    SwerveDriveKinematics swervekinematics;
+    SwerveDriveKinematics swervekinematics = new SwerveDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
     private double rightSpeed;
 
     public static final double kD = 0.25;
@@ -171,12 +172,10 @@ public class Drivetrain extends SubsystemBase{
     }
     
     public void SwerveDrive(double forward, double turn, double right){
-        ChassisSpeeds speeds = new ChassisSpeeds(forward, right, turn);
-
-        // Convert to module states
-        moduleStates = swervekinematics.toSwerveModuleStates(speeds);
-
-        drivetrain.setModuleStates(moduleStates);
+        right *= 0.1;
+        turn *= 0.1;
+        forward *= 0.1;
+        drivetrain.drive(right, forward, turn, false, false);
 
         // Front left module state
        // drivetrain.plugAndChugDrive(moduleStates);

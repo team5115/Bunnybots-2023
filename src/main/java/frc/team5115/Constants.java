@@ -18,15 +18,15 @@ public class Constants{
     public static final boolean MECANUM = false; 
   
     //motor ids
-    public static final byte FRONT_LEFT_MOTOR_ID = 1;
-    public static final byte FRONT_RIGHT_MOTOR_ID = 2;
-    public static final byte BACK_LEFT_MOTOR_ID = 3;
-    public static final byte BACK_RIGHT_MOTOR_ID = 4;
+    public static final byte FRONT_LEFT_MOTOR_ID = 6;
+    public static final byte FRONT_RIGHT_MOTOR_ID = 3;
+    public static final byte BACK_LEFT_MOTOR_ID = 7;
+    public static final byte BACK_RIGHT_MOTOR_ID = 2;
 
-    public static final byte FRONT_LEFT_TURN_MOTOR_ID = 11;
-    public static final byte FRONT_RIGHT_TURN_MOTOR_ID = 12;
-    public static final byte BACK_LEFT_TURN_MOTOR_ID = 13;
-    public static final byte BACK_RIGHT_TURN_MOTOR_ID = 14;
+    public static final byte FRONT_LEFT_TURN_MOTOR_ID = 5;
+    public static final byte FRONT_RIGHT_TURN_MOTOR_ID = 4;
+    public static final byte BACK_LEFT_TURN_MOTOR_ID = 8;
+    public static final byte BACK_RIGHT_TURN_MOTOR_ID = 1;
 
     public static final double TALON_ENCODER_CALIBRATION = (63.837/4104.5);
     public static final double NEO_VELOCITY_CALIBRATION = (0.47877871986/(60*10.71));
@@ -38,7 +38,7 @@ public class Constants{
     public static final byte JOY_Y_AXIS_ID = 1;
     public static final byte JOY_Z_AXIS_ID = 4; 
 
-    // NEW Feedforward
+    // 2023 Feedforward
     public static final double kS = 0.18296; 
     public static final double kV = 4.2023;
     public static final double kA = 0.28613;
@@ -109,7 +109,7 @@ public class Constants{
 
   }
     public static class SwerveConstants{
-        public static final int DrivingMotorPinionTeeth = 14;
+        public static final int DrivingMotorPinionTeeth = 13;
 
         // Invert the turning encoder, since the output shaft rotates in the opposite direction of
         // the steering motor in the MAXSwerve Module.
