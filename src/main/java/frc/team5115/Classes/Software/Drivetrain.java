@@ -171,10 +171,16 @@ public class Drivetrain extends SubsystemBase{
         return new double[] {x, y};
     }
     
-    public void SwerveDrive(double forward, double turn, double right){
+    public void SwerveDrive(double forward, double turn, double right, boolean x){
+        if(x){
+        right *= 0.1;
+        turn *= 0.1;
+        forward *= 0.1;
+        }else{
         right *= 0.2;
         turn *= 0.2;
         forward *= 0.2;
+        }
         drivetrain.drive(right, forward, turn, false, false);
 
         // Front left module state

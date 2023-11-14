@@ -23,7 +23,7 @@ public class RobotContainer {
     private final Drivetrain drivetrain;
     private final BunnyCatcher bunnyCatcher;
     private final ShuffleboardTab shuffleboardTab;
-    private final GenericEntry pathChooser;
+    private final GenericEntry Rookie;
     private final I2CHandler i2cHandler;
     private final NAVx navx;
     private final Arm arm;
@@ -43,7 +43,7 @@ public class RobotContainer {
         bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
         
         shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
-        pathChooser = shuffleboardTab.add("Are we doing the outside auto?", false).getEntry();
+        Rookie = shuffleboardTab.add("Rookie?", false).getEntry();
 
         configureButtonBindings();
     }
@@ -78,8 +78,7 @@ public class RobotContainer {
         drivetrain.resetNAVx();
         drivetrain.stop();
 
-        boolean doOutsidePath = pathChooser.getBoolean(false);
-        System.out.println("Do outside path? " + doOutsidePath + "@@@@@@@@@@@");
+        boolean doOutsidePath = false;
 
         autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath);
         autoCommandGroup.schedule();
@@ -92,10 +91,11 @@ public class RobotContainer {
     }
 
     public void teleopPeriodic() {
+        boolean RookieDriver = Rookie.getBoolean(false);;
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         // drivetrain.UpdateOdometry();
-        drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0));
+        drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0), RookieDriver);
 
         // double forward = -joy.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
         // double turn = ;
