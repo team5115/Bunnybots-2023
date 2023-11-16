@@ -42,7 +42,17 @@
      public PhotonVision() {
          // Change the name of your camera here to whatever it is in the PhotonVision UI.
          photonCamera = new PhotonCamera(frc.team5115.Constants.VisionConstants.leftCameraName);
- 
+         photonCamera = new PhotonCamera(frc.team5115.Constants.VisionConstants.rightCameraName);
+         photonCamera = new PhotonCamera(frc.team5115.Constants.VisionConstants.frontCameraName);
+
+
+        var result = photonCamera.getLatestResult();
+        if (result.hasTargets()){
+            var targets = result.getBestTarget();
+            var yaw = targets.getYaw();
+            var pitch = targets.getPitch();
+            var distance = targets.getBestCameraToTarget();
+        }
          try {
              // Attempt to load the AprilTagFieldLayout that will tell us where the tags are on the field.
              AprilTagFieldLayout fieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
