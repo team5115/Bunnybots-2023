@@ -12,12 +12,18 @@ public class DriveForwardWVision extends CommandBase{
     private double speed;
     private boolean doneMoving;
     private Timer timer;
-    private final double timeout;
+    private double timeout;
+    private double photonPoseEstimator;
 
-    public DriveForwardWVision(Drivetrain drivetrain, double dist, double speed) {
+    public DriveForwardWVision(Drivetrain drivetrain2, double d, double e) {
+    
+    }    
+
+    public void DriveForwardWVision(Drivetrain drivetrain, double dist, double speed, double photonPoseEstimator) {
         this.dist = dist;
         this.drivetrain = drivetrain;
         this.speed = speed;
+        photonPoseEstimator = photonPoseEstimator;
         timeout = Math.abs(dist / speed) + 1; // meters divided by m/s gives seconds! plus extra time
         timer = new Timer();
     }
@@ -26,13 +32,13 @@ public class DriveForwardWVision extends CommandBase{
     public void initialize() {
         timer.start();
         timer.reset();
-        start = drivetrain.getEstimatedPose();
+        start = drivetrain.photonPoseEstimator();
     }
 
     @Override
     public void execute() {
         doneMoving = drivetrain.UpdateMovingWithVision(dist, start, speed);
-        //System.out.println("Right Distance: " + drivetrain.getRightDistance() + "Left Distance: " + drivetrain.getRightDistance());
+           System.out.println("Right Distance: " + drivetrain.getRightDistance() + "Left Distance: " + drivetrain.getRightDistance());
     }
 
     public void end(boolean interrupted) {

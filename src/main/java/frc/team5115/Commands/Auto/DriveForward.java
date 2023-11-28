@@ -30,12 +30,14 @@ public class DriveForward extends CommandBase{
         startRightDist = drivetrain.getRightDistance();
         startleftDist = drivetrain.getLeftDistance();
         startAngle = drivetrain.getYawDeg();
+
+    
     }
 
     @Override
     public void execute() {
         doneMoving = drivetrain.UpdateMoving(dist, startleftDist, startRightDist, speed, startAngle);
-        //System.out.println("Right Distance: " + drivetrain.getRightDistance() + "Left Distance: " + drivetrain.getRightDistance());
+        System.out.println("Right Distance: " + drivetrain.getRightDistance() + "Left Distance: " + drivetrain.getRightDistance());
     }
 
     @Override

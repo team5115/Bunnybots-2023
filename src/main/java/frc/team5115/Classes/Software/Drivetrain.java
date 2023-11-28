@@ -418,4 +418,8 @@ public class Drivetrain extends SubsystemBase{
             drivetrain.plugAndFFDrive(leftSpeed, rightSpeed);
         }
     }
+
+    public Pose2d photonPoseEstimator() {
+        return null;
+    }
 }

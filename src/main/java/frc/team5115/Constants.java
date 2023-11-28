@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -166,7 +165,8 @@ public class Constants{
 
     public static class VisionConstants {
         public static final String leftCameraName = "HD_USB_Camera";
-        public static final String rightCameraName = null;
+        public static final String rightCameraName = "Microsoft_LifeCam_HD-3000";
+        public static final String frontCameraName = "OV5647";
 
         private static final double cameraPosX = 0.277813055626;
         private static final double cameraPosY = 0.346869443739;
