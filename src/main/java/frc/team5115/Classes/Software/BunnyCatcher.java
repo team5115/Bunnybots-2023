@@ -29,6 +29,13 @@ public class BunnyCatcher extends SubsystemBase{
         return turnTowardsAngle(new Angle(setpoint), direction);
     }
 
+    /**
+    * Get the speed for a motor to reach a desired angle
+    * 
+    * @param setpoint the angle that needs to be reached by the motor
+    * @param direction the direction to move: -1 always moves backwards, 0 finds the closest path, and 1 always moves forwards
+    * @return the speed necessary to reach the desired angle
+    */
     public double turnTowardsAngle(Angle setpoint, int direction) {
         final double delta = currentAngle.getDelta(setpoint, direction);
         final double current = currentAngle.getDegrees(0);

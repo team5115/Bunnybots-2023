@@ -21,18 +21,21 @@ public class Arm extends SubsystemBase{
 
     private PIDController turnController = new PIDController(TURN_PID_KP, TURN_PID_KI, TURN_PID_KD);
 
-	/**
-	 * `Arm` constructor.
-	 * @param hardwareArm - The arm hardware subsystem to be used
-	 * @param hardwareIntake - The intake hardware subsystem to be used
-	 */
     public Arm(HardwareArm hardwareArm){
         this.hardwareArm = hardwareArm;
         turnController.setTolerance(TURN_PID_TOLERANCE);
     }
 
-    public void setSetpoint(Angle setpoint){
-        this.setpoint = setpoint;
+    public Angle getSetpoint() {
+        return setpoint;
+    }
+
+    /**
+     * Changes the setpoint, but doesn't actually change the reference so that it doesn't become linked to the parameter passed in
+     * @param newSetpoint the new setpoint as an angle, but might as well be a double
+     */
+    public void setSetpoint(Angle newSetpoint) {
+        setpoint.angle = newSetpoint.angle;
     }
 
     public void turnUp() {
@@ -43,26 +46,24 @@ public class Arm extends SubsystemBase{
         setpoint.angle -= 9*0.02;
     }
 
-    /**
-	 * Disable brake mode on the arm's motors.
-	 */
     public void disableBrake(){
         hardwareArm.disableBrake();
     }
 
-	/**
-	 * Enable brake mode on the arm's motors.
-	 */
     public void enableBrake(){
         hardwareArm.enableBrake();
     }
 
-    public void updateController(){
-        final double pidOutput = turnController.calculate(getSetpoint().getDegrees(MIN_DEGREES), setpoint.getDegrees(MIN_DEGREES));
+    /**
+     * Update the pid controller to try to approach the setpoint angle by changing hardware arm's speed
+     * @return true if the arm is at the setpoint
+     */
+    public boolean updateController(){
+        final double pidOutput = turnController.calculate(getAngle().getDegrees(MIN_DEGREES), setpoint.getDegrees(MIN_DEGREES));
         
-        if (!turnController.atSetpoint()) {
-            hardwareArm.setTurn(pidOutput);
-        }
+        boolean atSetpoint = turnController.atSetpoint();
+        if (!atSetpoint) hardwareArm.setTurn(pidOutput);
+        return atSetpoint;
     }
 
     public boolean getFault(CANSparkMax.FaultID f){
@@ -73,7 +74,7 @@ public class Arm extends SubsystemBase{
         hardwareArm.stop();
     }
 
-    public Angle getSetpoint() {
+    public Angle getAngle() {
         return hardwareArm.getArmAngle();
     }
 

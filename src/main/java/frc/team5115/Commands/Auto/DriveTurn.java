@@ -3,7 +3,6 @@ package frc.team5115.Commands.Auto;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team5115.Classes.Accessory.Angle;
-import frc.team5115.Classes.Hardware.NAVx;
 import frc.team5115.Classes.Software.Drivetrain;
 
 public class DriveTurn extends CommandBase{
