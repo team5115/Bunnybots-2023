@@ -9,7 +9,6 @@ import frc.team5115.Classes.Software.PhotonVision;
    
 public class TurnWVision extends CommandBase{
     private final Timer grandTimer;
-    private final TurnWVision turnWVision;
     private Pose2d start;
     private boolean turned = false;
     private PhotonVision photonVision;
@@ -20,16 +19,11 @@ public class TurnWVision extends CommandBase{
     private double dist;
     private double speed;
 
-
-
-    public TurnWVision(TurnWVision turnWVision, PhotonVision photonVision, double absoluteAngle, double photonPoseEstimator) {
-        this.turnWVision = turnWVision;
+    public TurnWVision(PhotonVision photonVision, double absoluteAngle, double photonPoseEstimator) {
         angle = Angle.rollover(absoluteAngle, -180);
         grandTimer = new Timer();
         photonVision = new PhotonVision();
-        this.dist = dist;
-        this.speed = speed;
-        photonPoseEstimator = photonPoseEstimator;
+        this.photonPoseEstimator = photonPoseEstimator;
         
     }
 
@@ -43,16 +37,13 @@ public class TurnWVision extends CommandBase{
 
     @Override
     public void execute() {
-      doneMoving = drivetrain.UpdateMovingWithVision(dist, start, speed);
-        turned = drivetrain.TankDriveToAngle(angle);
-
-        
+      doneMoving = drivetrain.TurnWithVision(dist, start, speed);        
     }
 
     @Override
     public void end(boolean interrupted){
         System.out.println("finished turning");
-        turnWVision.stop();
+        drivetrain.stop();
     }
 
    private void stop() {

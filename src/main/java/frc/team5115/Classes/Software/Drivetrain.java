@@ -81,28 +81,15 @@ public class Drivetrain extends SubsystemBase{
         );
     }
 
-	/**
-	 * Stops all motors on the drivetrain.
-	 */
-    public void stop() {
-        drivetrain.PlugAndVoltDrive(0, 0, 0, 0);
+	public double getRightDistance() {
+        return 0; //TODO
     }
 
-	/**
-	 * @return The distance the left side of the drivetrain has traveled
-	 */
-    public double getLeftDistance(){
-        return drivetrain.getEncoderDistance(Constants.BACK_LEFT_MOTOR_ID);
+    public double getLeftDistance() {
+        return 0; //TODO
     }
 
-	/**
-	 * @return The distance the right side of the drivetrain has traveled
-	 */
-    public double getRightDistance(){
-        return drivetrain.getEncoderDistance(Constants.BACK_RIGHT_MOTOR_ID);
-    }
-
-	/**
+    /**
 	 * Sets the encoder values to 0.
 	 */
     public void resetEncoders() {
@@ -123,40 +110,6 @@ public class Drivetrain extends SubsystemBase{
      */    
     public void setThrottleEnabled(boolean enable) {
         throttle.setThrottleEnabled(enable);
-    }
-
-    @Deprecated
-    public void TankDriveOld(double forward, double turn){
-
-        leftSpeed = (forward + turn);
-        rightSpeed = (forward - turn);
-        
-        double[] v = normalizeVector(leftSpeed, rightSpeed);
-        leftSpeed = v[0];
-        rightSpeed = v[1];
-
-        //System.out.println(leftSpeed*12);
-        drivetrain.plugAndChugDrive(leftSpeed, rightSpeed, leftSpeed, rightSpeed);
-    }
-
-    /**
-     * Drive the robot using a tank drive setup.
-     * @param forward is for driving forward/backward: positive is forward, negative is backward
-     * @param turn is for turning right/left: positive is right, negative is left
-     */
-    public void TankDrive(double forward, double turn) { 
-        turn *= 0.7;
-
-        leftSpeed = (forward + turn);
-        rightSpeed = (forward - turn);
-        
-        double[] v = normalizeVector(leftSpeed, rightSpeed);
-        leftSpeed = v[0];
-        rightSpeed = v[1];
-
-        leftSpeed *= throttle.getThrottle();
-        rightSpeed *= throttle.getThrottle();
-        drivetrain.plugAndFFDrive(leftSpeed, rightSpeed);
     }
 
     private double[] normalizeVector(double x, double y) {
@@ -187,32 +140,6 @@ public class Drivetrain extends SubsystemBase{
        // drivetrain.plugAndChugDrive(moduleStates);
     }
 
-    public boolean TankDriveToAngle(double angleDegrees) { 
-        double rotationDegrees = navx.getYawDeg();
-        System.out.println("remaining degrees: " + (rotationDegrees-angleDegrees));
-        double turn = MathUtil.clamp(anglePID.calculate(rotationDegrees, angleDegrees), -0.75, 0.75);
-        leftSpeed = turn;
-        rightSpeed = -turn;
-        
-        drivetrain.plugAndFFDrive(leftSpeed, rightSpeed);
-        return Math.abs(rotationDegrees-angleDegrees)<15;
-        }
-
-	/**
-	 * Drives the robot to a trajectory state.
-	 * @param tState - The trajectory state to drive to
-	 */
-    public void TankDriveToTrajectoryState(Trajectory.State tState) {
-        final ChassisSpeeds adjustedSpeeds = ramseteController.calculate(getEstimatedPose(), tState);
-        final DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(adjustedSpeeds);
-        leftSpeed = wheelSpeeds.leftMetersPerSecond;
-        rightSpeed = wheelSpeeds.rightMetersPerSecond;
-        drivetrain.plugAndFFDrive(leftSpeed, rightSpeed);
-        System.out.println("left: " + leftSpeed + " | right: " + rightSpeed);
-        System.out.println(wheelSpeeds);
-        System.out.println(getEstimatedPose());
-    }
-
 	/**
 	 * Updates the odometry of the robot.
 	 */
@@ -240,78 +167,24 @@ public class Drivetrain extends SubsystemBase{
 	 * @param trajectory The trajectory to follow
 	 */
     public Command getRamseteCommand(Trajectory trajectory) {
-        //drivetrain.setCoast(true);
-        final double MaxSpeed = 0.1; // m/s
-        final double MaxAcceleration = 0.1; // m/s^2
-        final SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(
-            drivetrain.leftKs,
-            drivetrain.leftKv,
-            drivetrain.leftKa
-        );
-        final var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(simpleMotorFeedforward, kinematics, 10);
-        
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(MaxSpeed, MaxAcceleration);
-        config.setKinematics(kinematics);
-        config.addConstraint(autoVoltageConstraint);
-        config.setReversed(true);
-    
-        // An example trajectory to follow.  All units in meters.
-        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        //     new Pose2d(+0, +0, new Rotation2d(+0)), 
-        //     new ArrayList<Translation2d>(), 
-        //     new Pose2d(+3, +1, new Rotation2d(+0)),
-        //     config
-        // );
-    
-        RamseteCommand ramseteCommand =
-            new RamseteCommand(
-                trajectory,
-                this :: getEstimatedPose,
-                new RamseteController(),
-                simpleMotorFeedforward,
-                kinematics,
-                this :: getWheelSpeeds,
-                new PIDController(0, 0, 0),
-                new PIDController(0, 0, 0),
-                // RamseteCommand passes volts to the callback
-                drivetrain :: PlugAndVoltDrive
-                );
-    
-        // Reset odometry to the starting pose of the trajectory.
-        //resetOdometry(exampleTrajectory.getInitialPose());
-    
-        // Run path following command, then stop at the end.
-        return ramseteCommand.andThen(() -> stop());
+        return null;
     }
 
-	/**
-	 * @return A `DifferentialDriveWheelSpeeds` object containing the current speeds of the wheels
-	 */
-    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(drivetrain.getEncoderVelocity(1), drivetrain.getEncoderVelocity(2));
+    public void stop() {
+        drivetrain.drive(0, 0, 0, false, false);
     }
 
-    public boolean UpdateMoving(double dist, double startLeftDist, double startRightDist, double speedMagnitude, double heading) {
-        final double remainingLeftDistance = startLeftDist + dist - getLeftDistance();
-        final double remainingRightDistance = startRightDist + dist - getLeftDistance();
-
-        final double forward = speedMagnitude * Math.signum((remainingLeftDistance + remainingRightDistance) / 2);
-        final double turn = MathUtil.clamp(anglePID.calculate(getYawDeg(), heading), -0.3, +0.3);
-        leftSpeed = forward + turn;
-        rightSpeed = forward - turn;
-        drivetrain.plugAndFFDrive(leftSpeed, rightSpeed);
-
-        final double tolerance = 0.05;
-        return Math.abs(remainingLeftDistance) < tolerance || Math.abs(remainingRightDistance) < tolerance;
-    }      
 
     public boolean UpdateMovingWithVision(double dist, Pose2d pose, double speedMagnitude) {
         double realdist = pose.getTranslation().getDistance(getEstimatedPose().getTranslation());
         final double speed = speedMagnitude * Math.signum(dist);
-        drivetrain.plugAndFFDrive(speed, speed);
+        SwerveDrive(speed, 0, 0, false);
         final double tolerance = 0.1;
         return Math.abs(realdist-dist) < tolerance;
+    }
+
+    public boolean TurnWithVision(double dist, Pose2d start, double speed) {
+        return false;
     }
 
 	/**
@@ -333,90 +206,6 @@ public class Drivetrain extends SubsystemBase{
 	 */
     public double getYawDeg() {
         return navx.getPitchDeg();
-    }
-
-    /**
-     * Drive forward at a given speed.
-     * @param speed - The speed to drive at in m/s
-     */
-    public void autoDrive(double speed){
-        drivetrain.plugAndFFDrive(speed, speed);
-    }
-
-    @Deprecated
-    public void autoDriveF(){
-        drivetrain.plugAndChugDrive(0.3, -0.3, 0.3, -0.3);
-    }
-
-    @Deprecated
-    public void autoDriveB(){
-        drivetrain.plugAndChugDrive(-0.3, 0.3, -0.3, 0.3);
-    }
-    /**
-     * Drive backward at 1 m/s
-     */
-    public void autoDriveBackward(){
-        drivetrain.plugAndFFDrive(-1, -1);
-    }
-
-    @Deprecated
-    public void AdjustAngle(){
-        double xangle = 0; 
-        double detector = 0;
-        leftSpeed = -xangle*kD;
-        if(leftSpeed > 0.3){
-            leftSpeed = 0.3;
-            System.out.println("capping speed");
-        }
-        if(leftSpeed < -0.3){
-            leftSpeed = -0.3;
-            System.out.println("capping speed");
-        }
-        if(!(detector == 1)){
-            leftSpeed = 0;
-            System.out.print("nothing detected");
-        }
-
-        rightSpeed = leftSpeed;
-        drivetrain.plugAndFFDrive(leftSpeed, rightSpeed);
-        System.out.println("left speed "+ leftSpeed);
-        System.out.println("right speed "+ rightSpeed);
-    }
-
-	/**
-	 * @return The current x position
-	 */
-    public double getX(){
-        return tx.getDouble(0);
-    }
-
-	/**
-	 * @return The current y position
-	 */
-    public double getY(){
-        return ty.getDouble(0);
-    }
-
-    // public double getDistanceFromHub(){
-    //     double yAngle = ty.getDouble(0);
-    //     d = (AUTO_HIGH_GOAL_HEIGHT - AUTO_CAMERA_HEIGHT) / tan(toRadians(yAngle + AUTO_CAMERA_ANGLE));
-    //     return d;
-    // }
-
-    @Deprecated
-    public void AdjustDistance(){
-        double dectector = 0;
-        if(dectector == 1){
-            /**d = (AUTO_HIGH_GOAL_HEIGHT - AUTO_CAMERA_HEIGHT) / tan(toRadians(yangle + AUTO_CAMERA_ANGLE));
-            leftSpd = (d-HUB_DISTANCE)*hD;
-            rightSpd = -(d - HUB_DISTANCE)*hD;
-            */
-            double yangle = 0; 
-            leftSpeed = -(Constants.TARGET_ANGLE - yangle)*hD;
-            leftSpeed = Math.max(-0.3, Math.min(0.3, leftSpeed));
-            rightSpeed = leftSpeed;
-            drivetrain.plugAndFFDrive(leftSpeed, rightSpeed);
-        }
     }
 
     public Pose2d photonPoseEstimator() {

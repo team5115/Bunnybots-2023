@@ -45,14 +45,6 @@
          photonCamera = new PhotonCamera(frc.team5115.Constants.VisionConstants.rightCameraName);
          photonCamera = new PhotonCamera(frc.team5115.Constants.VisionConstants.frontCameraName);
 
-
-        var result = photonCamera.getLatestResult();
-        if (result.hasTargets()){
-            var targets = result.getBestTarget();
-            var yaw = targets.getYaw();
-            var pitch = targets.getPitch();
-            var distance = targets.getBestCameraToTarget();
-        }
          try {
              // Attempt to load the AprilTagFieldLayout that will tell us where the tags are on the field.
              AprilTagFieldLayout fieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();

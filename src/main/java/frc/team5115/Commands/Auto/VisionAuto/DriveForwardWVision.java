@@ -16,14 +16,14 @@ public class DriveForwardWVision extends CommandBase{
     private double photonPoseEstimator;
 
     public DriveForwardWVision(Drivetrain drivetrain2, double d, double e) {
-    
-    }    
+        
+    }
 
-    public void DriveForwardWVision(Drivetrain drivetrain, double dist, double speed, double photonPoseEstimator) {
+    public DriveForwardWVision(Drivetrain drivetrain, double dist, double speed, double photonPoseEstimator) {
         this.dist = dist;
         this.drivetrain = drivetrain;
         this.speed = speed;
-        photonPoseEstimator = photonPoseEstimator;
+        this.photonPoseEstimator = photonPoseEstimator;
         timeout = Math.abs(dist / speed) + 1; // meters divided by m/s gives seconds! plus extra time
         timer = new Timer();
     }
