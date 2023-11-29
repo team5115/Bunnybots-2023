@@ -87,20 +87,14 @@ public class RobotContainer {
     public void autoPeriod() {
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
-        //drivetrain.UpdateOdometry();
+        drivetrain.UpdateOdometry();
     }
 
     public void teleopPeriodic() {
         boolean RookieDriver = Rookie.getBoolean(false);;
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
-        // drivetrain.UpdateOdometry();
+        drivetrain.UpdateOdometry();
         drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0), RookieDriver);
-
-        // double forward = -joy.getRawAxis(JOY_Y_AXIS_ID); // negated because Y axis on controller is negated
-        // double turn = ;
-        // drivetrain.TankDrive(forward, turn);
-        
-        // System.out.println(drivetrain.getEstimatedPose());
     }
 }

@@ -222,4 +222,13 @@ public class HardwareDrivetrain{
     public double getHeading() {
         return Rotation2d.fromDegrees(gyro.getYawDeg()).getDegrees();
     }
+
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
+        };
+    }
 }
