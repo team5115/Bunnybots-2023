@@ -135,6 +135,7 @@ public class Drivetrain extends SubsystemBase{
 	 * @param trajectory The trajectory to follow
 	 */
     public Command getRamseteCommand(Trajectory trajectory) {
+        poseEstimator.getEstimatedPosition();
         return null; // TODO fill this out with actual code to generate a ramsete command using the getEstimatedPose() method
     }
 
