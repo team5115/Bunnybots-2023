@@ -41,6 +41,7 @@
  
      public PhotonVision() {
          // Change the name of your camera here to whatever it is in the PhotonVision UI.
+         // TODO this is just reassigning one variable three times. 
          photonCamera = new PhotonCamera(frc.team5115.Constants.VisionConstants.leftCameraName);
          photonCamera = new PhotonCamera(frc.team5115.Constants.VisionConstants.rightCameraName);
          photonCamera = new PhotonCamera(frc.team5115.Constants.VisionConstants.frontCameraName);
