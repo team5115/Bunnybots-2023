@@ -1,23 +1,26 @@
 package frc.team5115.Classes.Software;
 
 import java.util.Optional;
+
 import org.photonvision.EstimatedRobotPose;
 
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.ThrottleControl;
-import frc.team5115.Classes.Hardware.*;
+import frc.team5115.Classes.Hardware.HardwareDrivetrain;
 import frc.team5115.Classes.Hardware.NAVx;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The drivetrain subsystem. Provides a number of high-complexity utility functions for interacting with the drivetrain.
  */
+
+ 
 public class Drivetrain extends SubsystemBase{
     private final ThrottleControl throttle;
     private final RamseteController ramseteController;
@@ -27,6 +30,7 @@ public class Drivetrain extends SubsystemBase{
     private final PhotonVision photonVision;
     private SwerveDrivePoseEstimator poseEstimator;
     SwerveDriveKinematics swervekinematics = new SwerveDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
+// SwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(kinematics);
 
     public Drivetrain(PhotonVision photonVision, NAVx nav) {
         this.photonVision = photonVision;
@@ -118,6 +122,7 @@ public class Drivetrain extends SubsystemBase{
 	 */
     public Command getRamseteCommand(Trajectory trajectory) {
         poseEstimator.getEstimatedPosition();
+         
         return null; // TODO fill this out with actual code to generate a ramsete command using the getEstimatedPose() method
     }
 
