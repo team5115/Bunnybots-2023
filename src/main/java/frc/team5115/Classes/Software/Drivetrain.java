@@ -7,10 +7,12 @@ import org.photonvision.EstimatedRobotPose;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.ThrottleControl;
 import frc.team5115.Classes.Hardware.HardwareDrivetrain;
@@ -20,39 +22,26 @@ import frc.team5115.Classes.Hardware.NAVx;
  * The drivetrain subsystem. Provides a number of high-complexity utility functions for interacting with the drivetrain.
  */
 
- 
+
 public class Drivetrain extends SubsystemBase{
     private final ThrottleControl throttle;
-    private final RamseteController ramseteController;
     private final SwerveDriveKinematics kinematics;
+    private SwerveDrivePoseEstimator poseEstimator;
     private final HardwareDrivetrain hardwareDrivetrain;
     private final NAVx navx;
     private final PhotonVision photonVision;
-    private SwerveDrivePoseEstimator poseEstimator;
-    SwerveDriveKinematics swervekinematics = new SwerveDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
-// SwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(kinematics);
-
+   
     public Drivetrain(PhotonVision photonVision, NAVx nav) {
         this.photonVision = photonVision;
         throttle = new ThrottleControl(3, -3, 0.2);
         hardwareDrivetrain = new HardwareDrivetrain();
-        ramseteController = new RamseteController();
-        kinematics = new SwerveDriveKinematics(); //TODO fill this out
+        kinematics = new SwerveDriveKinematics(); //TODO fill this out -- take measurements n robot (position of wheels from middle)
         navx = nav;
     }
 
     public void init() {
         poseEstimator = new SwerveDrivePoseEstimator(kinematics, navx.getYawRotation2D(), hardwareDrivetrain.getModulePositions(), getEstimatedPose());
-        System.out.println("Angle from navx" + navx.getYawDeg()
-        );
-    }
-
-	public double getRightDistance() {
-        return 0; //TODO
-    }
-
-    public double getLeftDistance() {
-        return 0; //TODO
+        System.out.println("Angle from navx" + navx.getYawDeg());
     }
 
     /**
@@ -89,7 +78,6 @@ public class Drivetrain extends SubsystemBase{
             forward *= 0.2;
         }
         hardwareDrivetrain.drive(right, forward, turn, false, false);
-
         // Front left module state
        // drivetrain.plugAndChugDrive(moduleStates);
     }
@@ -121,8 +109,8 @@ public class Drivetrain extends SubsystemBase{
 	 * @param trajectory The trajectory to follow
 	 */
     public Command getRamseteCommand(Trajectory trajectory) {
-        poseEstimator.getEstimatedPosition();
-         
+       // RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getEstimatedPose, new RamseteController(2.0,0.7), kinematics, null, null);
+       //FIX THIS
         return null; // TODO fill this out with actual code to generate a ramsete command using the getEstimatedPose() method
     }
 
