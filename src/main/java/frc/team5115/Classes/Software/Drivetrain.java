@@ -31,6 +31,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+
 import edu.wpi.first.math.geometry.Translation2d;
 
 /**
@@ -46,7 +47,6 @@ public class Drivetrain extends SubsystemBase{
     private SwerveDrivePoseEstimator poseEstimator;
     SwerveDriveKinematics swervekinematics = new SwerveDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
 // SwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(kinematics);
-
 
     public Drivetrain(PhotonVision photonVision, NAVx nav) {
         this.photonVision = photonVision;
