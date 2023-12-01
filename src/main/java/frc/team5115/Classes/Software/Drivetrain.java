@@ -47,6 +47,7 @@ public class Drivetrain extends SubsystemBase{
     SwerveDriveKinematics swervekinematics = new SwerveDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
 // SwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(kinematics);
 
+
     public Drivetrain(PhotonVision photonVision, NAVx nav) {
         this.photonVision = photonVision;
         throttle = new ThrottleControl(3, -3, 0.2);
