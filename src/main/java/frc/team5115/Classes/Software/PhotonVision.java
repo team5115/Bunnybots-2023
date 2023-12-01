@@ -43,6 +43,9 @@ import edu.wpi.first.wpilibj.DriverStation;
     private PhotonCamera camRight;
     private PhotonCamera camLeft;
     private PhotonPoseEstimator photonPoseEstimator;
+    private PhotonPoseEstimator leftPoseEstimator;
+    private PhotonPoseEstimator rightPoseEstimator;
+
 
      
  
@@ -68,22 +71,22 @@ import edu.wpi.first.wpilibj.DriverStation;
          
          try {
              AprilTagFieldLayout fieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
-             photonPoseEstimator = new PhotonPoseEstimator(
+             leftPoseEstimator = new PhotonPoseEstimator(
             fieldLayout, PoseStrategy.MULTI_TAG_PNP, camLeft,  frc.team5115.Constants.VisionConstants.robotToCamL);
-            photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+            leftPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
          } catch (IOException e) {
              DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
-             photonPoseEstimator = null;
+             leftPoseEstimator = null;
          }
          
          try {
              AprilTagFieldLayout fieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();
-             photonPoseEstimator = new PhotonPoseEstimator(
+             rightPoseEstimator = new PhotonPoseEstimator(
             fieldLayout, PoseStrategy.MULTI_TAG_PNP, camRight,  frc.team5115.Constants.VisionConstants.robotToCamL);
-            photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+            rightPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
          } catch (IOException e) {
              DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
-             photonPoseEstimator = null;
+             rightPoseEstimator = null;
          }
      }
  
@@ -98,6 +101,24 @@ import edu.wpi.first.wpilibj.DriverStation;
              return Optional.empty();
          }
          photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-         return photonPoseEstimator.update();
+         leftPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+         rightPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+
+         var pose1 = photonPoseEstimator.update();
+         var pose2 = photonPoseEstimator.update();
+         var pose3 = photonPoseEstimator.update();
+
+         if (pose1.isPresent()) {
+            return pose1;
+         } else if( pose2.isPresent()){
+            return pose2;
+         } else if (pose3.isPresent()){
+            return pose3;
+         } else {
+            return Optional.empty();
+         }
+
+
      }
+
  }
