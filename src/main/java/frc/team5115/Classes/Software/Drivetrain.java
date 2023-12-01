@@ -45,6 +45,7 @@ public class Drivetrain extends SubsystemBase{
     private final PhotonVision photonVision;
     private SwerveDrivePoseEstimator poseEstimator;
     SwerveDriveKinematics swervekinematics = new SwerveDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
+// SwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(kinematics);
 
     public Drivetrain(PhotonVision photonVision, NAVx nav) {
         this.photonVision = photonVision;
@@ -136,6 +137,7 @@ public class Drivetrain extends SubsystemBase{
 	 */
     public Command getRamseteCommand(Trajectory trajectory) {
         poseEstimator.getEstimatedPosition();
+         
         return null; // TODO fill this out with actual code to generate a ramsete command using the getEstimatedPose() method
     }
 
