@@ -1,36 +1,18 @@
 package frc.team5115.Classes.Software;
 
-import frc.team5115.Constants;
-
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.ThrottleControl;
 import frc.team5115.Classes.Hardware.*;
 import frc.team5115.Classes.Hardware.NAVx;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.math.geometry.Translation2d;
 
 /**
@@ -40,7 +22,7 @@ public class Drivetrain extends SubsystemBase{
     private final ThrottleControl throttle;
     private final RamseteController ramseteController;
     private final SwerveDriveKinematics kinematics;
-    private final HardwareDrivetrain drivetrain;
+    private final HardwareDrivetrain hardwareDrivetrain;
     private final NAVx navx;
     private final PhotonVision photonVision;
     private SwerveDrivePoseEstimator poseEstimator;
@@ -49,14 +31,14 @@ public class Drivetrain extends SubsystemBase{
     public Drivetrain(PhotonVision photonVision, NAVx nav) {
         this.photonVision = photonVision;
         throttle = new ThrottleControl(3, -3, 0.2);
-        drivetrain = new HardwareDrivetrain();
+        hardwareDrivetrain = new HardwareDrivetrain();
         ramseteController = new RamseteController();
         kinematics = new SwerveDriveKinematics(); //TODO fill this out
         navx = nav;
     }
 
     public void init() {
-        poseEstimator = new SwerveDrivePoseEstimator(kinematics, navx.getYawRotation2D(), drivetrain.getModulePositions(), getEstimatedPose());
+        poseEstimator = new SwerveDrivePoseEstimator(kinematics, navx.getYawRotation2D(), hardwareDrivetrain.getModulePositions(), getEstimatedPose());
         System.out.println("Angle from navx" + navx.getYawDeg()
         );
     }
@@ -73,7 +55,7 @@ public class Drivetrain extends SubsystemBase{
 	 * Sets the encoder values to 0.
 	 */
     public void resetEncoders() {
-        drivetrain.resetEncoders();
+        hardwareDrivetrain.resetEncoders();
     }
 
     public void toggleThrottle(){
@@ -92,17 +74,17 @@ public class Drivetrain extends SubsystemBase{
         throttle.setThrottleEnabled(enable);
     }
     
-    public void SwerveDrive(double forward, double turn, double right, boolean x){
-        if(x){
-        right *= 0.1;
-        turn *= 0.1;
-        forward *= 0.1;
+    public void SwerveDrive(double forward, double turn, double right, boolean rookieMode){
+        if(rookieMode){
+            right *= 0.1;
+            turn *= 0.1;
+            forward *= 0.1;
         }else{
-        right *= 0.2;
-        turn *= 0.2;
-        forward *= 0.2;
+            right *= 0.2;
+            turn *= 0.2;
+            forward *= 0.2;
         }
-        drivetrain.drive(right, forward, turn, false, false);
+        hardwareDrivetrain.drive(right, forward, turn, false, false);
 
         // Front left module state
        // drivetrain.plugAndChugDrive(moduleStates);
@@ -113,7 +95,7 @@ public class Drivetrain extends SubsystemBase{
      * should run every robot tick
 	 */
     public void UpdateOdometry() {
-        poseEstimator.update(navx.getYawRotation2D(), drivetrain.getModulePositions());
+        poseEstimator.update(navx.getYawRotation2D(), hardwareDrivetrain.getModulePositions());
 
         Optional<EstimatedRobotPose> result = photonVision.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
         if (result.isPresent()) {
@@ -140,7 +122,7 @@ public class Drivetrain extends SubsystemBase{
     }
 
     public void stop() {
-        drivetrain.drive(0, 0, 0, false, false);
+        hardwareDrivetrain.drive(0, 0, 0, false, false);
     }
 
 	/**

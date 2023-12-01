@@ -1,8 +1,6 @@
 package frc.team5115.Robot;
 
-import static frc.team5115.Constants.*;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -11,8 +9,6 @@ import frc.team5115.Classes.Hardware.*;
 import frc.team5115.Classes.Software.*;
 import frc.team5115.Commands.Auto.AutoCommandGroup;
 import frc.team5115.Commands.Intake.CatchBunny;
-import frc.team5115.Commands.Intake.IntakeBerry;
-import frc.team5115.Commands.Intake.MoveArm;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.networktables.GenericEntry;
@@ -22,8 +18,8 @@ public class RobotContainer {
     private final PhotonVision photonVision;
     private final Drivetrain drivetrain;
     private final BunnyCatcher bunnyCatcher;
-    private final ShuffleboardTab shuffleboardTab;
     private final GenericEntry Rookie;
+    private final GenericEntry OutsidePath;
     private final I2CHandler i2cHandler;
     private final NAVx navx;
     private final Arm arm;
@@ -42,8 +38,9 @@ public class RobotContainer {
         arm = new Arm(hardwareArm);
         bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
         
-        shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
+        ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
         Rookie = shuffleboardTab.add("Rookie?", false).getEntry();
+        OutsidePath = shuffleboardTab.add("Do Outside Path?", false).getEntry();
 
         configureButtonBindings();
     }
@@ -71,14 +68,12 @@ public class RobotContainer {
     }
 
     public void startAuto(){
-        if(autoCommandGroup != null) {
-            autoCommandGroup.cancel();
-        }
+        if(autoCommandGroup != null) autoCommandGroup.cancel();
         drivetrain.resetEncoders();
         drivetrain.resetNAVx();
         drivetrain.stop();
 
-        boolean doOutsidePath = false;
+        boolean doOutsidePath = OutsidePath.getBoolean(false);
 
         autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath);
         autoCommandGroup.schedule();
@@ -91,10 +86,9 @@ public class RobotContainer {
     }
 
     public void teleopPeriodic() {
-        boolean RookieDriver = Rookie.getBoolean(false);;
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         drivetrain.UpdateOdometry();
-        drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0), RookieDriver);
+        drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0), Rookie.getBoolean(false));
     }
 }
