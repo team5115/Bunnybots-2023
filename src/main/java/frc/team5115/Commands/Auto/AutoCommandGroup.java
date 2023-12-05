@@ -18,10 +18,10 @@ public class AutoCommandGroup extends SequentialCommandGroup {
     }
 
     private void denToYardOutside(){
-        addCommands(drivetrain.getRamseteCommand(Paths.denToYardOutside));
+        addCommands(new FollowTrajectory(drivetrain, Paths.denToYardOutside));
     }
 
     private void denToYardInside(){
-        addCommands(drivetrain.getRamseteCommand(Paths.denToYardInside));
+        addCommands(new FollowTrajectory(drivetrain, Paths.denToYardInside));
     }
 }

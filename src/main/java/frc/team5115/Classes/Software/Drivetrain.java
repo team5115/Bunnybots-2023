@@ -4,15 +4,22 @@ import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Constants;
 import frc.team5115.Classes.Hardware.HardwareDrivetrain;
 import frc.team5115.Classes.Hardware.NAVx;
+import frc.team5115.Commands.Auto.FollowTrajectory;
 import frc.team5115.Constants.DriveConstants;
 
 public class Drivetrain extends SubsystemBase {
@@ -20,6 +27,7 @@ public class Drivetrain extends SubsystemBase {
     private final PhotonVision photonVision;
     private final NAVx navx;
     private final GenericEntry outsidePath;
+    private final HolonomicDriveController holonomicDriveController;
     private SwerveDrivePoseEstimator poseEstimator;
    
     public Drivetrain(HardwareDrivetrain hardwareDrivetrain, PhotonVision photonVision, NAVx navx, GenericEntry outsidePath) {
@@ -27,6 +35,13 @@ public class Drivetrain extends SubsystemBase {
         this.hardwareDrivetrain = hardwareDrivetrain;
         this.navx = navx;
         this.outsidePath = outsidePath;
+
+        // TODO tune the pid controllers for the holonomic drive controller
+        holonomicDriveController = new HolonomicDriveController(
+            new PIDController(1, 0, 0),
+            new PIDController(1, 0, 0),
+            new ProfiledPIDController(1, 0, 0,
+                new TrapezoidProfile.Constraints(6.28, 3.14))); 
     }
 
     public void init() {
@@ -65,8 +80,6 @@ public class Drivetrain extends SubsystemBase {
             forward *= 0.2;
         }
         hardwareDrivetrain.drive(right, forward, turn, false, false);
-        // Front left module state
-       // drivetrain.plugAndChugDrive(moduleStates);
     }
 
 	/**
@@ -85,20 +98,17 @@ public class Drivetrain extends SubsystemBase {
     }
 
 	/**
-	 * @return The estimated pose of the robot
+	 * @return The estimated pose of the robot based on vision measurements COMBINED WITH drive motor measurements
 	 */
     public Pose2d getEstimatedPose() {
         return poseEstimator.getEstimatedPosition();
     }
 
-	/**
-	 * Generate a command that will make the robot follow a given trajectory.
-	 * @param trajectory The trajectory to follow
-	 */
-    public Command getRamseteCommand(Trajectory trajectory) {
-        // RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getEstimatedPose, new RamseteController(2.0,0.7), kinematics, null, null);
-        // FIX THIS
-        return null; // TODO fill this out with actual code to generate a ramsete command using the getEstimatedPose() method
+    public void followTrajectoryState(Trajectory trajectory, double time) {
+        Trajectory.State goal = trajectory.sample(time);
+        ChassisSpeeds adjustedSpeeds = holonomicDriveController.calculate(getEstimatedPose(), goal, goal.poseMeters.getRotation());
+        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(adjustedSpeeds);
+        hardwareDrivetrain.setModuleStates(moduleStates);
     }
 
     public void stop() {
