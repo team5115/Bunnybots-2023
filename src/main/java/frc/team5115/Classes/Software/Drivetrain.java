@@ -4,44 +4,47 @@ import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 
-import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team5115.Classes.Accessory.ThrottleControl;
+import frc.team5115.Constants;
 import frc.team5115.Classes.Hardware.HardwareDrivetrain;
 import frc.team5115.Classes.Hardware.NAVx;
+import frc.team5115.Constants.DriveConstants;
 
-/**
- * The drivetrain subsystem. Provides a number of high-complexity utility functions for interacting with the drivetrain.
- */
-
-
-public class Drivetrain extends SubsystemBase{
-    private final ThrottleControl throttle;
-    private final SwerveDriveKinematics kinematics;
-    private SwerveDrivePoseEstimator poseEstimator;
+public class Drivetrain extends SubsystemBase {
     private final HardwareDrivetrain hardwareDrivetrain;
-    private final NAVx navx;
     private final PhotonVision photonVision;
+    private final NAVx navx;
+    private final GenericEntry outsidePath;
+    private SwerveDrivePoseEstimator poseEstimator;
    
-    public Drivetrain(PhotonVision photonVision, NAVx nav) {
+    public Drivetrain(HardwareDrivetrain hardwareDrivetrain, PhotonVision photonVision, NAVx navx, GenericEntry outsidePath) {
         this.photonVision = photonVision;
-        throttle = new ThrottleControl(3, -3, 0.2);
-        hardwareDrivetrain = new HardwareDrivetrain();
-        kinematics = new SwerveDriveKinematics(); //TODO fill this out -- take measurements n robot (position of wheels from middle)
-        navx = nav;
+        this.hardwareDrivetrain = hardwareDrivetrain;
+        this.navx = navx;
+        this.outsidePath = outsidePath;
     }
 
     public void init() {
-        poseEstimator = new SwerveDrivePoseEstimator(kinematics, navx.getYawRotation2D(), hardwareDrivetrain.getModulePositions(), getEstimatedPose());
+        poseEstimator = new SwerveDrivePoseEstimator(
+            DriveConstants.kDriveKinematics,
+            navx.getYawRotation2D(),
+            hardwareDrivetrain.getModulePositions(),
+            getStartingPoseGuess());
+
         System.out.println("Angle from navx" + navx.getYawDeg());
+    }
+
+    private Pose2d getStartingPoseGuess() {
+        if (outsidePath.getBoolean(false)) {
+            return Constants.Paths.denToYardOutside.sample(0).poseMeters;
+        } else {
+            return Constants.Paths.denToYardInside.sample(0).poseMeters;
+        }
     }
 
     /**
@@ -49,22 +52,6 @@ public class Drivetrain extends SubsystemBase{
 	 */
     public void resetEncoders() {
         hardwareDrivetrain.resetEncoders();
-    }
-
-    public void toggleThrottle(){
-        throttle.toggleThrottle();
-    }
-
-    public void toggleSlowMode() {
-        throttle.toggleSlowMode();
-    }
-
-    /**
-     * Enable or disable throttle. set to false to make throttle.getThrottle() return 0, true for normal function
-     * @param enable true to allow stuff using throttle to move, false will just make getThrottle return 0
-     */    
-    public void setThrottleEnabled(boolean enable) {
-        throttle.setThrottleEnabled(enable);
     }
     
     public void SwerveDrive(double forward, double turn, double right, boolean rookieMode){
@@ -109,8 +96,8 @@ public class Drivetrain extends SubsystemBase{
 	 * @param trajectory The trajectory to follow
 	 */
     public Command getRamseteCommand(Trajectory trajectory) {
-       // RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getEstimatedPose, new RamseteController(2.0,0.7), kinematics, null, null);
-       //FIX THIS
+        // RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getEstimatedPose, new RamseteController(2.0,0.7), kinematics, null, null);
+        // FIX THIS
         return null; // TODO fill this out with actual code to generate a ramsete command using the getEstimatedPose() method
     }
 

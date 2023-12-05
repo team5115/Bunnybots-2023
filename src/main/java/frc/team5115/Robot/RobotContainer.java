@@ -2,7 +2,6 @@ package frc.team5115.Robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team5115.Classes.Accessory.I2CHandler;
 import frc.team5115.Classes.Hardware.*;
@@ -15,38 +14,38 @@ import edu.wpi.first.networktables.GenericEntry;
 
 public class RobotContainer {
     private final Joystick joy;
-    private final PhotonVision photonVision;
     private final Drivetrain drivetrain;
     private final BunnyCatcher bunnyCatcher;
-    private final GenericEntry Rookie;
-    private final GenericEntry OutsidePath;
+    private final GenericEntry rookie;
+    private final GenericEntry outsidePath;
     private final I2CHandler i2cHandler;
     private final NAVx navx;
     private final Arm arm;
     private AutoCommandGroup autoCommandGroup;
 
-    public RobotContainer() {
+    public RobotContainer() {        
+        ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
+        rookie = shuffleboardTab.add("Rookie?", false).getEntry();
+        outsidePath = shuffleboardTab.add("Do Outside Path?", false).getEntry();
+
         joy = new Joystick(0);
         navx = new NAVx();
         i2cHandler = new I2CHandler();
-        photonVision = new PhotonVision();
-        drivetrain = new Drivetrain(photonVision, navx);
 
-        HardwareBunnyCatcher hardwareBunnyCatcher = new HardwareBunnyCatcher();
-        HardwareArm hardwareArm = new HardwareArm(navx, i2cHandler);
+        HardwareDrivetrain hardwareDrivetrain = new HardwareDrivetrain();
+        PhotonVision photonVision = new PhotonVision();
+        drivetrain = new Drivetrain(hardwareDrivetrain, photonVision, navx, outsidePath);
         
-        arm = new Arm(hardwareArm);
+        HardwareBunnyCatcher hardwareBunnyCatcher = new HardwareBunnyCatcher();
         bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
         
-        ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
-        Rookie = shuffleboardTab.add("Rookie?", false).getEntry();
-        OutsidePath = shuffleboardTab.add("Do Outside Path?", false).getEntry();
+        HardwareArm hardwareArm = new HardwareArm(navx, i2cHandler);
+        arm = new Arm(hardwareArm);
 
         configureButtonBindings();
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new InstantCommand(drivetrain :: toggleSlowMode));
         new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new CatchBunny(bunnyCatcher, 90, 1));
     }
 
@@ -73,8 +72,7 @@ public class RobotContainer {
         drivetrain.resetNAVx();
         drivetrain.stop();
 
-        boolean doOutsidePath = OutsidePath.getBoolean(false);
-
+        boolean doOutsidePath = outsidePath.getBoolean(false);
         autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath);
         autoCommandGroup.schedule();
     }
@@ -89,6 +87,6 @@ public class RobotContainer {
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         drivetrain.UpdateOdometry();
-        drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0), Rookie.getBoolean(false));
+        drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0), rookie.getBoolean(false));
     }
 }
