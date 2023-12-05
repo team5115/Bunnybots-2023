@@ -181,7 +181,7 @@ public class Drivetrain extends SubsystemBase{
         turn *= 0.2;
         forward *= 0.2;
         }
-        drivetrain.drive(right, forward, turn, false, false);
+        drivetrain.drive(right, forward, turn, true, true);
 
         // Front left module state
        // drivetrain.plugAndChugDrive(moduleStates);
