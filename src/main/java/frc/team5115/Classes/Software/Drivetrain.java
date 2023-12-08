@@ -14,12 +14,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Constants;
 import frc.team5115.Classes.Hardware.HardwareDrivetrain;
 import frc.team5115.Classes.Hardware.NAVx;
-import frc.team5115.Commands.Auto.FollowTrajectory;
 import frc.team5115.Constants.DriveConstants;
 
 public class Drivetrain extends SubsystemBase {
@@ -86,7 +84,7 @@ public class Drivetrain extends SubsystemBase {
 	 * Updates the odometry of the robot.
      * should run every robot tick
 	 */
-    public void UpdateOdometry() {
+    public void updateOdometry() {
         poseEstimator.update(navx.getYawRotation2D(), hardwareDrivetrain.getModulePositions());
 
         Optional<EstimatedRobotPose> result = photonVision.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());

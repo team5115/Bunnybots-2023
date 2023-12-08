@@ -9,29 +9,28 @@ public class MockBunnyCatcher extends HardwareBunnyCatcher {
 
     //Basic Constructor that Begins the call to the HardwareBunnyCatcher Class
     public MockBunnyCatcher() {
-        System.out.println("Bunny Catcher has been Created");
-
+        System.out.println("Mock Bunny Catcher has been created");
     }
 
     @Override
     public double getPosition() {
-        //gets the position in degrees of the BunnyCatcher
         return position;
     }
 
     public double getSpeed() {
-        //gets the speed of the BunnyCatcher
         return speed;
     }
 
     @Override
     public void setSpeed(double speed) {
-        //sets the speed of the BunnyCatcher
         this.speed = speed;
     }
 
+    /**
+     * Set the mock position in degrees 
+     * @param position of the angle in degrees
+     */
     public void setPosition(double position) {
-        //sets the position in degrees of the BunnyCatcher
         this.position = position;
     }
 }

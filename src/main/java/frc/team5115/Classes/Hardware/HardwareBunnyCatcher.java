@@ -5,9 +5,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class HardwareBunnyCatcher {
-    static final double positionConversionFactor = 360; // UNKNOWN
-    final CANSparkMax roller;
-    final RelativeEncoder encoder;
+    static final double positionConversionFactor = 360.0 / 5.0; // 360 degrees per 1 catcher rev * 1 catcher rev per 5 motor revs
+    protected final CANSparkMax roller;
+    protected final RelativeEncoder encoder;
 
     public HardwareBunnyCatcher() {
         roller = new CANSparkMax(5, MotorType.kBrushless);
@@ -20,10 +20,10 @@ public class HardwareBunnyCatcher {
     }
 
     /**
-     * 
-     * @param speed in degrees per second
+     * sets the speed of the roller motor based on -1 to 1 range
+     * @param speed is a "speed"between -1 and 1
      */
     public void setSpeed(double speed) {
-       roller.set(speed / 360.0);
+       roller.set(speed);
     }
 }

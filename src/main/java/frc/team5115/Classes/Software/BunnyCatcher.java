@@ -6,10 +6,10 @@ import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
 
 public class BunnyCatcher extends SubsystemBase{
-    static final double kP = 0.28;
+    static final double kP = 0.001;
     static final double kI = 0.0;
     static final double kD = 0.0;
-    static final double MaxSpeed = 30; // degrees per second
+    static final double MaxSpeed = 1; // degrees per second
 
     public final HardwareBunnyCatcher hardwareBunnyCatcher;
     final PIDController pidController;

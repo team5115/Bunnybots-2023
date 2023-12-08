@@ -80,13 +80,13 @@ public class RobotContainer {
     public void autoPeriod() {
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
-        drivetrain.UpdateOdometry();
+        drivetrain.updateOdometry();
     }
 
     public void teleopPeriodic() {
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
-        drivetrain.UpdateOdometry();
+        drivetrain.updateOdometry();
         drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0), rookie.getBoolean(false));
     }
 }
