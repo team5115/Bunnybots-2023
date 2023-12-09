@@ -15,7 +15,10 @@ public class DeployCatcher extends SequentialCommandGroup {
         this.coordination = coordination;
 
         // if it's already fully stowed, then we don't want to collide with the arm, so we exit early
-        if (coordination.getState() == State.FullyStowed) return;
+        if (coordination.getState() == State.FullyStowed) {
+            System.out.println("DeployCatcher fails because already fully stowed");
+            return;
+        }
 
         addCommands(
             new InstantCommand(bunnyCatcher::deployCatcher),

@@ -16,7 +16,10 @@ public class StowArm extends SequentialCommandGroup {
         this.coordination = coordination;
 
         // if we are fully deployed, we are not allowed to stow the arm without first stowing the bunny catcher
-        if (coordination.getState() == State.FullyDeployed) return;
+        if (coordination.getState() == State.FullyDeployed) {
+            System.out.println("StowArm fails because already fully deployed");
+            return;
+        }
 
         addCommands(
             // TODO determine what angle is stowed

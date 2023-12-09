@@ -91,7 +91,7 @@ public class RobotContainer {
         drivetrain.resetEncoders();
 
         // now handle both the arm initilizaitons
-        new FullyStow(arm, bunnyCatcher, coordination).schedule();
+        // new FullyStow(arm, bunnyCatcher, coordination).schedule();
     }
 
     public void autoPeriod() {

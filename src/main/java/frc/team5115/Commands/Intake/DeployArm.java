@@ -16,7 +16,10 @@ public class DeployArm extends SequentialCommandGroup {
         this.coordination = coordination;
 
         // if it's already fully deployed, then we don't wanna lie about the position of the bunny catcher
-        if (coordination.getState() == State.FullyDeployed) return;
+        if (coordination.getState() == State.FullyDeployed) {
+            System.out.println("DeployArm fails because already fully deployed");
+            return;
+        }
 
         addCommands(
             // TODO determine what angle is deployed

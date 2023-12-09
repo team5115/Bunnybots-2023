@@ -12,6 +12,7 @@ public class MechanismCoordination {
     }
 
     public void setState(State state) {
+        System.out.println("MechanismCoordination sets a new state of: " + state.toString());
         this.state = state;
     }
 
