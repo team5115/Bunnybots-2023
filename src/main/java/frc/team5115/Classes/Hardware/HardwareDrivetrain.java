@@ -14,7 +14,7 @@ import frc.team5115.Classes.Accessory.SwerveUtils;
  * The drivetrain hardware subsystem. Provides methods to interact with the actual hardware of the drivetrain.
  */
 public class HardwareDrivetrain{    
-    private NAVx gyro = new NAVx();
+    private final NAVx gyro;
 
     SwerveDriveModule frontLeft = new SwerveDriveModule(FRONT_LEFT_MOTOR_ID, FRONT_LEFT_TURN_MOTOR_ID, Math.toRadians(90));
     SwerveDriveModule frontRight = new SwerveDriveModule(FRONT_RIGHT_MOTOR_ID, FRONT_RIGHT_TURN_MOTOR_ID, Math.toRadians(180));
@@ -34,7 +34,8 @@ public class HardwareDrivetrain{
     * `HardwareDrivetrain` constructor.
     * @param arm - The arm subsystem to use
     */
-    public HardwareDrivetrain(){
+    public HardwareDrivetrain(NAVx gyro){
+        this.gyro = gyro;
         resetEncoders();
         //frontRightOld.setInverted(true);
     }
@@ -162,7 +163,7 @@ public class HardwareDrivetrain{
      * @return the robot's heading in degrees, from -180 to 180
      */
     public double getHeading() {
-        return Rotation2d.fromDegrees(gyro.getYawDeg()).getDegrees();
+        return gyro.getYawDeg();
     }
 
     public SwerveModulePosition[] getModulePositions() {

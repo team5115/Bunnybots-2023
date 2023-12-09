@@ -23,7 +23,7 @@ public class HardwareArm extends SubsystemBase{
     private final double Kv = 4.5;
     private final double Ka = 0.1113;
     private final double Kg = 0.39;
-    private final ArmFeedforward arm = new ArmFeedforward(Ks, Kg, Kv, Ka); // Rad Calibrated
+    private final ArmFeedforward ff = new ArmFeedforward(Ks, Kg, Kv, Ka); // Rad Calibrated
 
     public HardwareArm(NAVx navx, I2CHandler i2c){
         grabLeft = new TalonSRX(2);
@@ -46,7 +46,7 @@ public class HardwareArm extends SubsystemBase{
         if(speed != speed) {
             speed = 0;
         }
-        armTurn.setVoltage(Math.max(arm.calculate(getArmAngle().getRadians(-Math.PI), 1.5*speed), -10));
+        armTurn.setVoltage(Math.max(ff.calculate(getArmAngle().getRadians(-Math.PI), 1.5*speed), -10));
     }
 
     public void stop(){
@@ -54,13 +54,11 @@ public class HardwareArm extends SubsystemBase{
     }
     
     public double getTurnCurrent(){
-        //return armTurn.getOutputCurrent();
-        return 0.0;
+        return armTurn.getOutputCurrent();
     }
     
     public boolean getFault(CANSparkMax.FaultID f){
-       // return armTurn.getFault(f);
-       return false;
+       return armTurn.getFault(f);
     }
     
     /**
@@ -74,10 +72,10 @@ public class HardwareArm extends SubsystemBase{
     }
 
     public void disableBrake(){
-        //intakeTurn.setIdleMode(IdleMode.kCoast);
+        // armTurn.setIdleMode(IdleMode.kCoast);
     }
 
     public void enableBrake(){
-        //armTurn.setIdleMode(IdleMode.kBrake);
+        // armTurn.setIdleMode(IdleMode.kBrake);
     }
 }

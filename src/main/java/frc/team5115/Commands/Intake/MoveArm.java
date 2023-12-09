@@ -5,13 +5,10 @@ import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Software.Arm;
 
 public class MoveArm extends CommandBase{
-    private Arm arm;
-    private Angle absoluteSetpoint;
-    private double distToStop = 1;
+    private final Arm arm;
     private boolean atSetpoint;
     
     public MoveArm(Angle absoluteSetpoint, Arm arm) {
-        this.absoluteSetpoint = absoluteSetpoint;
         this.arm = arm;
         arm.setSetpoint(absoluteSetpoint);
     }
@@ -28,7 +25,7 @@ public class MoveArm extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        // confirm that PID is done AND it matches this commands requirements for finishing
-        return atSetpoint && absoluteSetpoint.getDelta(arm.getAngle()) < distToStop;
+        // confirm that PID is done
+        return atSetpoint;
     }
 }
