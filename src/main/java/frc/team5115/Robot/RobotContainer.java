@@ -4,16 +4,22 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team5115.Classes.Accessory.I2CHandler;
+import frc.team5115.Classes.Accessory.MechanismCoordination;
 import frc.team5115.Classes.Hardware.*;
 import frc.team5115.Classes.Software.*;
 import frc.team5115.Commands.Auto.AutoCommandGroup;
-import frc.team5115.Commands.Intake.CatchBunny;
+import frc.team5115.Commands.Auto.FullyStow;
+import frc.team5115.Commands.Intake.DeployArm;
+import frc.team5115.Commands.Intake.DeployCatcher;
+import frc.team5115.Commands.Intake.StowArm;
+import frc.team5115.Commands.Intake.StowCatcher;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.networktables.GenericEntry;
 
 public class RobotContainer {
-    private final Joystick joy;
+    private final Joystick joy1;
+    private final Joystick joy2;
     private final Drivetrain drivetrain;
     private final BunnyCatcher bunnyCatcher;
     private final GenericEntry rookie;
@@ -21,14 +27,17 @@ public class RobotContainer {
     private final I2CHandler i2cHandler;
     private final NAVx navx;
     private final Arm arm;
+    private final MechanismCoordination coordination;
     private AutoCommandGroup autoCommandGroup;
+
 
     public RobotContainer() {        
         ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
         rookie = shuffleboardTab.add("Rookie?", false).getEntry();
         outsidePath = shuffleboardTab.add("Do Outside Path?", false).getEntry();
 
-        joy = new Joystick(0);
+        joy1 = new Joystick(0);
+        joy2 = new Joystick(1);
         navx = new NAVx();
         i2cHandler = new I2CHandler();
 
@@ -43,18 +52,15 @@ public class RobotContainer {
         arm = new Arm(hardwareArm);
 
         configureButtonBindings();
+
+        coordination = new MechanismCoordination(MechanismCoordination.State.FullyStowed);
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joy, XboxController.Button.kA.value).onTrue(new CatchBunny(bunnyCatcher, 90, 1));
-    }
-
-    public void startTeleop(){
-        drivetrain.init();
-        if(autoCommandGroup != null) autoCommandGroup.cancel();
-        
-        System.out.println("Starting teleop");
-        drivetrain.resetEncoders();
+        new JoystickButton(joy2, XboxController.Button.kA.value).onTrue(new DeployCatcher(bunnyCatcher, coordination));
+        new JoystickButton(joy2, XboxController.Button.kB.value).onTrue(new StowCatcher(bunnyCatcher, coordination));
+        new JoystickButton(joy2, XboxController.Button.kX.value).onTrue(new DeployArm(arm, coordination));
+        new JoystickButton(joy2, XboxController.Button.kY.value).onTrue(new StowArm(arm, coordination));
     }
 
     public void disabledInit(){
@@ -77,6 +83,17 @@ public class RobotContainer {
         autoCommandGroup.schedule();
     }
 
+    public void startTeleop(){
+        drivetrain.init();
+        if(autoCommandGroup != null) autoCommandGroup.cancel();
+        
+        System.out.println("Starting teleop");
+        drivetrain.resetEncoders();
+
+        // now handle both the arm initilizaitons
+        new FullyStow(arm, bunnyCatcher, coordination).schedule();
+    }
+
     public void autoPeriod() {
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
@@ -84,9 +101,12 @@ public class RobotContainer {
     }
 
     public void teleopPeriodic() {
+        // spin the catcher based on value from right joystick Y axis
+        bunnyCatcher.spin(joy2.getRawAxis(5));
+
         // i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         drivetrain.updateOdometry();
-        drivetrain.SwerveDrive(-joy.getRawAxis(1), joy.getRawAxis(4), joy.getRawAxis(0), rookie.getBoolean(false));
+        drivetrain.SwerveDrive(-joy1.getRawAxis(1), joy1.getRawAxis(4), joy1.getRawAxis(0), rookie.getBoolean(false));
     }
 }

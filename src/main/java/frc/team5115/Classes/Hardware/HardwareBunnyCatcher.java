@@ -4,14 +4,18 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class HardwareBunnyCatcher {
+    public enum PistonState {
+        In, Out, Off
+    }
+
     static final double positionConversionFactor = 360.0 / 5.0; // 360 degrees per 1 catcher rev * 1 catcher rev per 5 motor revs
     protected final CANSparkMax roller;
     protected final RelativeEncoder encoder;
-
-    private DoubleSolenoid armSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+    protected final DoubleSolenoid leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+    protected final DoubleSolenoid rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
 
     public HardwareBunnyCatcher() {
         roller = new CANSparkMax(5, MotorType.kBrushless);
@@ -19,12 +23,22 @@ public class HardwareBunnyCatcher {
         encoder.setPositionConversionFactor(positionConversionFactor);
     }
 
-    public void armIn(){
-        armSolenoid.set(Value.kReverse);
+    public void setPistons(PistonState state) {
+        DoubleSolenoid.Value value = convertPistonStateToDoubleSolenoidValue(state);
+        leftSolenoid.set(value);
+        rightSolenoid.set(value);
     }
 
-    public void armOut(){
-        armSolenoid.set(Value.kForward);
+    private DoubleSolenoid.Value convertPistonStateToDoubleSolenoidValue(PistonState state) {
+        switch (state) {
+            case In:
+                return DoubleSolenoid.Value.kReverse;
+            case Out:
+                return DoubleSolenoid.Value.kForward;
+            case Off:
+            default:
+                return DoubleSolenoid.Value.kOff;
+        }
     }
 
     public double getPosition() {

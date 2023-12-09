@@ -62,7 +62,6 @@ public class HardwareArm extends SubsystemBase{
        // return armTurn.getFault(f);
        return false;
     }
-
     
     /**
      * This uses the navx and the bno to get the arm degree instead of motor encoder

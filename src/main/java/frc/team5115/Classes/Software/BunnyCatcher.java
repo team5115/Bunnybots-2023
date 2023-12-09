@@ -4,14 +4,15 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
+import frc.team5115.Classes.Hardware.HardwareBunnyCatcher.PistonState;
 
 public class BunnyCatcher extends SubsystemBase{
-    static final double kP = 0.001;
+    static final double kP = 0.1;
     static final double kI = 0.0;
     static final double kD = 0.0;
     static final double MaxSpeed = 1; // degrees per second
 
-    public final HardwareBunnyCatcher hardwareBunnyCatcher;
+    private final HardwareBunnyCatcher hardwareBunnyCatcher;
     final PIDController pidController;
     final Angle currentAngle;
 
@@ -25,7 +26,7 @@ public class BunnyCatcher extends SubsystemBase{
         hardwareBunnyCatcher.setSpeed(0);
     }
     
-    public double turnTowardsAngle(double setpoint, int direction) {
+    public boolean turnTowardsAngle(double setpoint, int direction) {
         return turnTowardsAngle(new Angle(setpoint), direction);
     }
 
@@ -34,9 +35,9 @@ public class BunnyCatcher extends SubsystemBase{
     * 
     * @param setpoint the angle that needs to be reached by the motor
     * @param direction the direction to move: -1 always moves backwards, 0 finds the closest path, and 1 always moves forwards
-    * @return the speed necessary to reach the desired angle
+    * @return if the pid loop reports being at the setpoint
     */
-    public double turnTowardsAngle(Angle setpoint, int direction) {
+    public boolean turnTowardsAngle(Angle setpoint, int direction) {
         final double delta = currentAngle.getDelta(setpoint, direction);
         final double current = currentAngle.getDegrees(0);
 
@@ -44,7 +45,15 @@ public class BunnyCatcher extends SubsystemBase{
         final double speed = Math.min(Math.abs(pid), MaxSpeed) * Math.signum(delta);
 
         hardwareBunnyCatcher.setSpeed(speed);
-        return speed;
+        return pidController.atSetpoint();
+    }
+
+    /**
+     * just spin the motor at speed -1 to 1
+     * @param speed
+     */
+    public void spin(double speed) {
+        hardwareBunnyCatcher.setSpeed(speed);
     }
 
     public void updateAngle() {
@@ -53,5 +62,17 @@ public class BunnyCatcher extends SubsystemBase{
 
     public Angle getAngle() {
         return currentAngle;
+    }
+
+    public void deployCatcher() {
+        hardwareBunnyCatcher.setPistons(PistonState.In);
+    }
+
+    public void stowCatcher() {
+        hardwareBunnyCatcher.setPistons(PistonState.Out);
+    }
+
+    public void pistonOff() {
+        hardwareBunnyCatcher.setPistons(PistonState.Off);
     }
 }
