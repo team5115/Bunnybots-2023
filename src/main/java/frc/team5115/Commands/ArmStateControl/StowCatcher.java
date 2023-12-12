@@ -9,15 +9,22 @@ import frc.team5115.Classes.Accessory.MechanismCoordination.Action;
 import frc.team5115.Classes.Software.BunnyCatcher;
 
 public class StowCatcher extends SequentialCommandGroup {
+    final MechanismCoordination coordination;
+    Command callback;
+
     public StowCatcher(BunnyCatcher bunnyCatcher, MechanismCoordination coordination) {
-        // check for the action, then the callback will run at the end of _this_ command group and will set the state to the new state
-        Command callback = coordination.tryPerformAction(Action.DeployCatcher);
-        if (callback == null) return;
+        this.coordination = coordination;
 
         addCommands(
+            new InstantCommand(this::checkForAllowability),
             new InstantCommand(bunnyCatcher::stowCatcher),
             new WaitCommand(0.5),
             callback
         );
+    }
+    
+    private void checkForAllowability() {
+        Command callback = coordination.tryPerformAction(Action.StowCatcher);
+        if (callback == null) end(true);
     }
 }

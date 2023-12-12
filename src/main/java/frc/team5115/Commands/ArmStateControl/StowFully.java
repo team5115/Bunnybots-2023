@@ -22,8 +22,6 @@ public class StowFully extends SequentialCommandGroup {
                 break;
 
             default:
-            case FullyStowed:
-                // do nothing here
                 break;
         }
     }

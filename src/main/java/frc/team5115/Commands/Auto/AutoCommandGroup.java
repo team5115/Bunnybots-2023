@@ -47,7 +47,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         addCommands(
             new DeployFully(arm, bunnyCatcher, coordination),
             new WaitCommand(0.5),
-            new SpinBunnyCatcher(bunnyCatcher, 180, 1),
+            new SpinBunnyCatcher(bunnyCatcher, 180, 1).withTimeout(5),
             new WaitCommand(0.5),
             new StowFully(arm, bunnyCatcher, coordination)
         );

@@ -22,8 +22,6 @@ public class DeployFully extends SequentialCommandGroup {
                 break;
 
             default:
-            case FullyDeployed:
-                // do nothing here
                 break;
         }
     }
