@@ -24,6 +24,7 @@ public class HardwareArm extends SubsystemBase{
     private final double Ka = 0.1113;
     private final double Kg = 0.39;
     private final ArmFeedforward ff = new ArmFeedforward(Ks, Kg, Kv, Ka); // Rad Calibrated
+    private final Angle armAngle;
 
     public HardwareArm(NAVx navx, I2CHandler i2c){
         grabLeft = new TalonSRX(2);
@@ -35,6 +36,7 @@ public class HardwareArm extends SubsystemBase{
         armTurn = new CANSparkMax(50, MotorType.kBrushless);  
         armTurn.setIdleMode(IdleMode.kBrake);
         armTurn.setSmartCurrentLimit(80, 80);
+        armAngle = new Angle(90); //TODO determine stowed angle
     }
 
     public void spinGrabbers(double speedNormalized) {
@@ -66,9 +68,8 @@ public class HardwareArm extends SubsystemBase{
      * @return the angle the arm is at relative to the horizontal
      */
     public Angle getArmAngle(){
-        final double navxPitch = navx.getPitchDeg();
-        final double bnoPitch = i2c.getPitch();
-        return new Angle(bnoPitch - navxPitch);
+        armAngle.angle = i2c.getPitch() - navx.getPitchDeg();
+        return armAngle;
     }
 
     public void disableBrake(){

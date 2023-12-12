@@ -78,6 +78,11 @@ public class Angle {
         }
     }
 
+    @Override
+    public String toString() {
+        return Double.toString(getDegrees(0));
+    }
+
     /**
      * Put an angle inside of a range
      * 

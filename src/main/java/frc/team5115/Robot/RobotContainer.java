@@ -107,9 +107,11 @@ public class RobotContainer {
     }
 
     public void startTest() {
-        i2cHandler.getPitch();
+        drivetrain.init();
     }
 
     public void testPeriodic() {
+        i2cHandler.updatePitch();
+        System.out.println("i2c.getPitch() " + i2cHandler.getPitch() + "| navx.getPitch() " + navx.getPitchDeg() + " | arm.getAngle() " + arm.getAngle().toString());
     }
 }
