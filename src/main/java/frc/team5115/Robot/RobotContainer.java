@@ -90,12 +90,14 @@ public class RobotContainer {
         i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         drivetrain.updateOdometry();
+        arm.updateController();
     }
 
     public void teleopPeriodic() {
         i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
         drivetrain.updateOdometry();
+        arm.updateController();
 
         // spin the catcher based on value from right joystick Y axis
         bunnyCatcher.spin(joyManips.getRawAxis(5));
