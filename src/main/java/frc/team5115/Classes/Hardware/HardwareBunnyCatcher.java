@@ -18,7 +18,7 @@ public class HardwareBunnyCatcher {
     protected final DoubleSolenoid rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
 
     public HardwareBunnyCatcher() {
-        roller = new CANSparkMax(5, MotorType.kBrushless);
+        roller = new CANSparkMax(11, MotorType.kBrushless);
         encoder = roller.getEncoder();
         encoder.setPositionConversionFactor(positionConversionFactor);
     }

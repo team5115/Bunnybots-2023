@@ -1,7 +1,5 @@
 package frc.team5115.Classes.Hardware;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -13,8 +11,7 @@ import frc.team5115.Classes.Accessory.I2CHandler;
 
 public class HardwareArm extends SubsystemBase{
     private final CANSparkMax armTurn;
-    private final TalonSRX grabLeft;
-    private final TalonSRX grabRight;
+    private final CANSparkMax grabby;
     
     private final NAVx navx;
     private final I2CHandler i2c;
@@ -27,21 +24,18 @@ public class HardwareArm extends SubsystemBase{
     private final Angle armAngle;
 
     public HardwareArm(NAVx navx, I2CHandler i2c){
-        grabLeft = new TalonSRX(2);
-        grabRight = new TalonSRX(4);
-
         this.navx = navx;
         this.i2c = i2c;
-
-        armTurn = new CANSparkMax(50, MotorType.kBrushless);  
+        
+        grabby = new CANSparkMax(9, MotorType.kBrushless);
+        armTurn = new CANSparkMax(10, MotorType.kBrushless);  
         armTurn.setIdleMode(IdleMode.kBrake);
         armTurn.setSmartCurrentLimit(80, 80);
         armAngle = new Angle(90); //TODO determine stowed angle
     }
 
     public void spinGrabbers(double speedNormalized) {
-        grabLeft.set(TalonSRXControlMode.PercentOutput, speedNormalized);
-        grabRight.set(TalonSRXControlMode.PercentOutput, -speedNormalized);
+        grabby.set(speedNormalized);
     }
 
     public void setTurn(double speed){
