@@ -83,14 +83,14 @@ public class Arm extends SubsystemBase{
     }
 
     public void spinIn() {
-        hardwareArm.spinGrabbers(+1);
+        hardwareArm.spinGrabbers(+0.2);
     }
 
     public void spinOut() {
-        hardwareArm.spinGrabbers(-1);
+        hardwareArm.spinGrabbers(-0.2);
     }
 
     public void spinStop() {
-        hardwareArm.spinGrabbers(+0.1);
+        hardwareArm.spinGrabbers(+0.0);
     }
 }

@@ -52,10 +52,10 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployCatcher(bunnyCatcher, coordination));
-        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new StowCatcher(bunnyCatcher, coordination));
-        new JoystickButton(joyManips, XboxController.Button.kX.value).onTrue(new DeployArm(arm, coordination));
-        new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm, coordination));
+        // new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployCatcher(bunnyCatcher, coordination));
+        // new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new StowCatcher(bunnyCatcher, coordination));
+        // new JoystickButton(joyManips, XboxController.Button.kX.value).onTrue(new DeployArm(arm, coordination));
+        // new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm, coordination));
     }
 
     public void disabledInit(){
@@ -111,7 +111,8 @@ public class RobotContainer {
     }
 
     public void testPeriodic() {
-        i2cHandler.updatePitch();
-        System.out.println("i2c.getPitch() " + i2cHandler.getPitch() + "| navx.getPitch() " + navx.getPitchDeg() + " | arm.getAngle() " + arm.getAngle().toString());
+        // i2cHandler.updatePitch();
+        // System.out.println("i2c.getPitch() " + i2cHandler.getPitch() + "| navx.getPitch() " + navx.getPitchDeg() + " | arm.getAngle() " + arm.getAngle().toString());
+        arm.spinIn();
     }
 }

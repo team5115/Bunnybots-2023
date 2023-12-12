@@ -14,8 +14,8 @@ public class HardwareBunnyCatcher {
     static final double positionConversionFactor = 360.0 / 5.0; // 360 degrees per 1 catcher rev * 1 catcher rev per 5 motor revs
     protected final CANSparkMax roller;
     protected final RelativeEncoder encoder;
-    protected final DoubleSolenoid leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
-    protected final DoubleSolenoid rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+    protected final DoubleSolenoid leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+    protected final DoubleSolenoid rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
 
     public HardwareBunnyCatcher() {
         roller = new CANSparkMax(11, MotorType.kBrushless);
