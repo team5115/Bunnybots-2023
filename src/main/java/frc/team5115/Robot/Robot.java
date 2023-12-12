@@ -54,11 +54,11 @@ public class Robot extends TimedRobot {
     }
 
     public void testInit () {
-
+        robotContainer.startTest();
     }
 
     public void testPeriodic () {
-
+        robotContainer.testPeriodic();
     }
 
     public void practiceInit(){

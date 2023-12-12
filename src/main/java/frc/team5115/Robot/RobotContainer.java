@@ -72,6 +72,7 @@ public class RobotContainer {
         drivetrain.resetEncoders();
         drivetrain.resetNAVx();
         drivetrain.stop();
+        drivetrain.init();
 
         boolean doOutsidePath = outsidePath.getBoolean(false);
         autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath, arm, bunnyCatcher, coordination);
@@ -103,5 +104,12 @@ public class RobotContainer {
         bunnyCatcher.spin(joyManips.getRawAxis(5));
 
         drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
+    }
+
+    public void startTest() {
+        i2cHandler.getPitch();
+    }
+
+    public void testPeriodic() {
     }
 }
