@@ -66,6 +66,10 @@ public class Arm extends SubsystemBase{
         return atSetpoint;
     }
 
+    public boolean atSetpoint() {
+        return turnController.atSetpoint();
+    }
+
     public boolean getFault(CANSparkMax.FaultID f){
         return hardwareArm.getFault(f);
     }
