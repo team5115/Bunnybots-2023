@@ -6,16 +6,10 @@ import frc.team5115.Classes.Software.Arm;
 
 public class MoveArm extends CommandBase{
     private final Arm arm;
-    private boolean atSetpoint;
     
     public MoveArm(Angle absoluteSetpoint, Arm arm) {
         this.arm = arm;
         arm.setSetpoint(absoluteSetpoint);
-    }
-
-    @Override
-    public void execute() {
-        atSetpoint = arm.updateController();
     }
 
     @Override
@@ -26,6 +20,6 @@ public class MoveArm extends CommandBase{
     @Override
     public boolean isFinished() {
         // confirm that PID is done
-        return atSetpoint;
+        return arm.atSetpoint();
     }
 }
