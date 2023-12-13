@@ -7,6 +7,7 @@ import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
 import frc.team5115.Classes.Hardware.HardwareBunnyCatcher.PistonState;
 
 public class BunnyCatcher extends SubsystemBase{
+    // TODO tune bunny catcher pid values
     static final double kP = 0.1;
     static final double kI = 0.0;
     static final double kD = 0.0;
@@ -72,7 +73,7 @@ public class BunnyCatcher extends SubsystemBase{
         hardwareBunnyCatcher.setPistons(PistonState.In);
     }
 
-    public void stowCatcher() {
+    public void stow() {
         isDeployed = false;
         hardwareBunnyCatcher.setPistons(PistonState.Out);
     }

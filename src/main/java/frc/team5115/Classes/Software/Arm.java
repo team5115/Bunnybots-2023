@@ -97,12 +97,12 @@ public class Arm extends SubsystemBase{
 
     public void deploy() {
         isDeployed = true;
-        setpoint.angle = 0; // TODO figure out deployed angle
+        setpoint.angle = 0; // TODO: figure out deployed angle
     }
 
     public void stow() {
         isDeployed = false;
-        setpoint.angle = 80; // TODO figure out stow angle
+        setpoint.angle = 80; // TODO: figure out stow angle
     }
 
     public boolean isDeployed() {

@@ -7,10 +7,18 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team5115.Classes.Accessory.I2CHandler;
-import frc.team5115.Classes.Accessory.MechanismCoordination;
-import frc.team5115.Classes.Hardware.*;
-import frc.team5115.Classes.Software.*;
-import frc.team5115.Commands.ArmStateControl.*;
+import frc.team5115.Classes.Hardware.HardwareArm;
+import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
+import frc.team5115.Classes.Hardware.HardwareDrivetrain;
+import frc.team5115.Classes.Hardware.NAVx;
+import frc.team5115.Classes.Software.Arm;
+import frc.team5115.Classes.Software.BunnyCatcher;
+import frc.team5115.Classes.Software.Drivetrain;
+import frc.team5115.Classes.Software.PhotonVision;
+import frc.team5115.Commands.Arms.DeployArm;
+import frc.team5115.Commands.Arms.DeployCatcher;
+import frc.team5115.Commands.Arms.StowArm;
+import frc.team5115.Commands.Arms.StowCatcher;
 import frc.team5115.Commands.Auto.AutoCommandGroup;
 
 public class RobotContainer {
@@ -23,7 +31,6 @@ public class RobotContainer {
     private final I2CHandler i2cHandler;
     private final NAVx navx;
     private final Arm arm;
-    private final MechanismCoordination coordination;
     private AutoCommandGroup autoCommandGroup;
 
     public RobotContainer() {
@@ -46,16 +53,14 @@ public class RobotContainer {
         HardwareArm hardwareArm = new HardwareArm(navx, i2cHandler);
         arm = new Arm(hardwareArm);
 
-        coordination = new MechanismCoordination(MechanismCoordination.State.FullyStowed);
-
         configureButtonBindings();
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployCatcher(bunnyCatcher, coordination));
-        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new StowCatcher(bunnyCatcher, coordination));
-        new JoystickButton(joyManips, XboxController.Button.kX.value).onTrue(new DeployArm(arm, coordination));
-        new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm, coordination));
+        new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployCatcher(bunnyCatcher, arm));
+        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new StowCatcher(bunnyCatcher));
+        new JoystickButton(joyManips, XboxController.Button.kX.value).onTrue(new DeployArm(arm, bunnyCatcher));
+        new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm));
     }
 
     public void disabledInit(){
@@ -75,7 +80,7 @@ public class RobotContainer {
         drivetrain.init();
 
         boolean doOutsidePath = outsidePath.getBoolean(false);
-        autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath, arm, bunnyCatcher, coordination);
+        autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath, arm, bunnyCatcher);
         autoCommandGroup.schedule();
     }
 
@@ -112,7 +117,8 @@ public class RobotContainer {
 
     public void testPeriodic() {
         i2cHandler.updatePitch();
-        System.out.println("i2c.getPitch() " + i2cHandler.getPitch() + "| navx.getPitch() " + navx.getPitchDeg() + " | arm.getAngle() " + arm.getAngle().toString());
-        arm.spinIn();
+        System.out.println("i2c.getPitch() " + i2cHandler.getPitch() +
+        " | navx.getPitch() " + navx.getPitchDeg() +
+        " | arm.getAngle() " + arm.getAngle().toString());
     }
 }

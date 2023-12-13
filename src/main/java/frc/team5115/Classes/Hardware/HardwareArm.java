@@ -31,7 +31,7 @@ public class HardwareArm extends SubsystemBase{
         armTurn = new CANSparkMax(10, MotorType.kBrushless);  
         armTurn.setIdleMode(IdleMode.kBrake);
         armTurn.setSmartCurrentLimit(80, 80);
-        armAngle = new Angle(90); //TODO determine stowed angle
+        armAngle = new Angle(90); //TODO: determine starting angle
     }
 
     public void spinGrabbers(double speedNormalized) {
