@@ -19,12 +19,16 @@ public class DeployCatcher extends SequentialCommandGroup {
             new InstantCommand(this::checkForAllowability),
             new InstantCommand(bunnyCatcher::deployCatcher),
             new WaitCommand(0.5),
-            callback
+            new InstantCommand(this::runCallback)
         );
     }
     
     private void checkForAllowability() {
-        Command callback = coordination.tryPerformAction(Action.DeployCatcher);
+        callback = coordination.tryPerformAction(Action.DeployCatcher);
         if (callback == null) end(true);
+    }
+
+    private void runCallback() {
+        callback.schedule();
     }
 }

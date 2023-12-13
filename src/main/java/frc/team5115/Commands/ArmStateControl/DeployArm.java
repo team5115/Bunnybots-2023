@@ -19,15 +19,18 @@ public class DeployArm extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(this::checkForAllowability),
-            // TODO determine what angle is deployed
-            new MoveArm(new Angle(90), arm).withTimeout(10),
+            new MoveArm(new Angle(90), arm).withTimeout(10), // TODO determine what angle is deployed
             new WaitCommand(0.1),
-            callback
+            new InstantCommand(this::runCallback)
         );
     }
 
     private void checkForAllowability() {
-        Command callback = coordination.tryPerformAction(Action.DeployArm);
+        callback = coordination.tryPerformAction(Action.DeployArm);
         if (callback == null) end(true);
+    }
+
+    private void runCallback() {
+        callback.schedule();
     }
 }

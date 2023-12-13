@@ -19,15 +19,18 @@ public class StowArm extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(this::checkForAllowability),
-            // TODO determine what angle is stowed
-            new MoveArm(new Angle(0), arm).withTimeout(10),
+            new MoveArm(new Angle(0), arm).withTimeout(10), // TODO determine what angle is stowed
             new WaitCommand(0.1),
-            callback
+            new InstantCommand(this::runCallback)
         );
     }
 
     private void checkForAllowability() {
-        Command callback = coordination.tryPerformAction(Action.StowArm);
+        callback = coordination.tryPerformAction(Action.StowArm);
         if (callback == null) end(true);
+    }
+    
+    private void runCallback() {
+        callback.schedule();
     }
 }

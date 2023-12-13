@@ -19,12 +19,16 @@ public class StowCatcher extends SequentialCommandGroup {
             new InstantCommand(this::checkForAllowability),
             new InstantCommand(bunnyCatcher::stowCatcher),
             new WaitCommand(0.5),
-            callback
+            new InstantCommand(this::runCallback)
         );
     }
     
     private void checkForAllowability() {
-        Command callback = coordination.tryPerformAction(Action.StowCatcher);
+        callback = coordination.tryPerformAction(Action.StowCatcher);
         if (callback == null) end(true);
+    }
+    
+    private void runCallback() {
+        callback.schedule();
     }
 }
