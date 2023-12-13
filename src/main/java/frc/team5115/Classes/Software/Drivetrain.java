@@ -34,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
         this.navx = navx;
         this.outsidePath = outsidePath;
 
-        // TODO tune the pid controllers for the holonomic drive controller
+        // TODO? do we need to tune the pid controllers for the holonomic drive controller?
         holonomicDriveController = new HolonomicDriveController(
             new PIDController(1, 0, 0),
             new PIDController(1, 0, 0),

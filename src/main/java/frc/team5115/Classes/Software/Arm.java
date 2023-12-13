@@ -20,6 +20,7 @@ public class Arm extends SubsystemBase{
     private Angle setpoint = new Angle(-90);
 
     private PIDController turnController = new PIDController(TURN_PID_KP, TURN_PID_KI, TURN_PID_KD);
+    private boolean isDeployed;
 
     public Arm(HardwareArm hardwareArm){
         this.hardwareArm = hardwareArm;
@@ -92,5 +93,19 @@ public class Arm extends SubsystemBase{
 
     public void spinStop() {
         hardwareArm.spinGrabbers(+0.0);
+    }
+
+    public void deploy() {
+        isDeployed = true;
+        setpoint.angle = 0; // TODO: figure out deployed angle
+    }
+
+    public void stow() {
+        isDeployed = false;
+        setpoint.angle = 80; // TODO: figure out stow angle
+    }
+
+    public boolean isDeployed() {
+        return isDeployed;
     }
 }
