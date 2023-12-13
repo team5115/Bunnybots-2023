@@ -67,7 +67,7 @@ public class BunnyCatcher extends SubsystemBase{
         return currentAngle;
     }
 
-    public void deployCatcher() {
+    public void deploy() {
         isDeployed = true;
         hardwareBunnyCatcher.setPistons(PistonState.In);
     }
