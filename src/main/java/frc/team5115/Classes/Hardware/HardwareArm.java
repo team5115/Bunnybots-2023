@@ -32,6 +32,7 @@ public class HardwareArm extends SubsystemBase{
         armTurn.setIdleMode(IdleMode.kBrake);
         armTurn.setSmartCurrentLimit(80, 80);
         armAngle = new Angle(90); //TODO: determine starting angle
+        armTurn.setInverted(true);
     }
 
     public void spinGrabbers(double speedNormalized) {
@@ -42,7 +43,12 @@ public class HardwareArm extends SubsystemBase{
         if(speed != speed) {
             speed = 0;
         }
-        armTurn.setVoltage(Math.max(ff.calculate(getArmAngle().getRadians(-Math.PI), 1.5*speed), -10));
+        armTurn.set(speed);
+        // armTurn.setVoltage(Math.max(ff.calculate(getArmAngle().getRadians(-Math.PI), speed), -10));
+    }
+
+    public void turnRaw(double speed) {
+        armTurn.set(speed);
     }
 
     public void stop(){

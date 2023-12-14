@@ -28,6 +28,9 @@ public class RobotContainer {
     private final BunnyCatcher bunnyCatcher;
     private final GenericEntry rookie;
     private final GenericEntry outsidePath;
+    private final GenericEntry testingValue1;
+    private final GenericEntry testingValue2;
+    private final GenericEntry testingValue3;
     private final I2CHandler i2cHandler;
     private final NAVx navx;
     private final Arm arm;
@@ -37,6 +40,10 @@ public class RobotContainer {
         ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
         rookie = shuffleboardTab.add("Rookie?", false).getEntry();
         outsidePath = shuffleboardTab.add("Do Outside Path?", false).getEntry();
+        
+        testingValue1 = shuffleboardTab.add("test #1 oooh", 0).getEntry();
+        testingValue2 = shuffleboardTab.add("test #2 oooh", 0).getEntry();
+        testingValue3 = shuffleboardTab.add("test #3 oooh", 0).getEntry();
 
         joyDrive = new Joystick(0);
         joyManips = new Joystick(1);
@@ -72,6 +79,12 @@ public class RobotContainer {
         arm.stop();
     }
 
+    public void startTest() {
+    }
+
+    public void testPeriodic() {
+    }
+
     public void startAuto(){
         if(autoCommandGroup != null) autoCommandGroup.cancel();
         drivetrain.resetEncoders();
@@ -84,14 +97,6 @@ public class RobotContainer {
         autoCommandGroup.schedule();
     }
 
-    public void startTeleop(){
-        drivetrain.init();
-        if(autoCommandGroup != null) autoCommandGroup.cancel();
-        
-        System.out.println("Starting teleop");
-        drivetrain.resetEncoders();
-    }
-
     public void autoPeriod() {
         i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
@@ -99,26 +104,23 @@ public class RobotContainer {
         arm.updateController();
     }
 
+    public void startTeleop(){
+        // drivetrain.init();
+        if(autoCommandGroup != null) autoCommandGroup.cancel();
+        
+        System.out.println("Starting teleop");
+        drivetrain.resetEncoders();
+    }
+
     public void teleopPeriodic() {
         i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
-        drivetrain.updateOdometry();
+        // drivetrain.updateOdometry();
         arm.updateController();
 
         // spin the catcher based on value from right joystick Y axis
-        bunnyCatcher.spin(joyManips.getRawAxis(5));
+        // bunnyCatcher.spin(joyManips.getRawAxis(5) / 4.0);
 
-        drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
-    }
-
-    public void startTest() {
-        drivetrain.init();
-    }
-
-    public void testPeriodic() {
-        i2cHandler.updatePitch();
-        System.out.println("i2c.getPitch() " + i2cHandler.getPitch() +
-        " | navx.getPitch() " + navx.getPitchDeg() +
-        " | arm.getAngle() " + arm.getAngle().toString());
+        // drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
     }
 }
