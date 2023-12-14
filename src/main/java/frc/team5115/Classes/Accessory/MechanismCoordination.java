@@ -37,10 +37,10 @@ public class MechanismCoordination {
      */
     public Command tryPerformAction(Action action) {
         if (state == State.Moving) return null;
-        state = State.Moving;
-
         State newState = attemptActionOnState(state, action);
-        if (newState == state) {
+        
+        if (newState != state) {
+            state = State.Moving;
             // create a command that will just run the setState function
             return new InstantCommand(new Runnable() {
                 @Override
