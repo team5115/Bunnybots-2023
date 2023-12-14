@@ -61,6 +61,7 @@ public class BunnyCatcher extends SubsystemBase{
     }
 
     public Angle getAngle() {
+        updateAngle();
         return currentAngle;
     }
 
