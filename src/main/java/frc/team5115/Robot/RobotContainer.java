@@ -113,13 +113,14 @@ public class RobotContainer {
     }
 
     public void teleopPeriodic() {
+        // drivetrain.updateOdometry();
         i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
-        // drivetrain.updateOdometry();
-        arm.updateController();
+        // arm.updateController();
 
-        // spin the catcher based on value from right joystick Y axis
-        // bunnyCatcher.spin(joyManips.getRawAxis(5) / 4.0);
+        // spin the spinners based on values from joystick Y axis (arm on left one, bunny on right one)
+        arm.spin(joyManips.getRawAxis(1) * 0.7);
+        bunnyCatcher.spin(joyManips.getRawAxis(5) * 0.25);
 
         // drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
     }

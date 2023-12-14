@@ -19,7 +19,7 @@ public class IntakeBerry extends CommandBase{
     public void initialize(){
         timer.start();
         timer.reset();
-        arm.spin(+0.2);
+        arm.spin(+0.5);
     }
 
     @Override
