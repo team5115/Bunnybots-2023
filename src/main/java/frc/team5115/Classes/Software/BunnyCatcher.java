@@ -16,6 +16,8 @@ public class BunnyCatcher extends SubsystemBase{
     final PIDController pidController;
     final Angle currentAngle;
 
+    private boolean isDeployed;
+
     public BunnyCatcher(HardwareBunnyCatcher hardwareBunnyCatcher) {
         this.hardwareBunnyCatcher = hardwareBunnyCatcher;
         pidController = new PIDController(kP, kI, kD);
@@ -66,14 +68,16 @@ public class BunnyCatcher extends SubsystemBase{
     }
 
     public void deployCatcher() {
+        isDeployed = true;
         hardwareBunnyCatcher.setPistons(PistonState.In);
     }
 
     public void stowCatcher() {
+        isDeployed = false;
         hardwareBunnyCatcher.setPistons(PistonState.Out);
     }
 
-    public void pistonOff() {
-        hardwareBunnyCatcher.setPistons(PistonState.Off);
+    public boolean isDeployed() {
+        return isDeployed;
     }
 }
