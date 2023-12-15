@@ -16,9 +16,8 @@ import frc.team5115.Classes.Software.BunnyCatcher;
 import frc.team5115.Classes.Software.Drivetrain;
 import frc.team5115.Classes.Software.PhotonVision;
 import frc.team5115.Commands.Arms.DeployArm;
-import frc.team5115.Commands.Arms.DeployCatcher;
 import frc.team5115.Commands.Arms.StowArm;
-import frc.team5115.Commands.Arms.StowCatcher;
+import frc.team5115.Commands.Arms.ToggleCatcher;
 import frc.team5115.Commands.Auto.AutoCommandGroup;
 
 public class RobotContainer {
@@ -64,10 +63,9 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployCatcher(bunnyCatcher, arm));
-        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new StowCatcher(bunnyCatcher));
-        new JoystickButton(joyManips, XboxController.Button.kX.value).onTrue(new DeployArm(arm, bunnyCatcher));
         new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm));
+        new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployArm(arm, bunnyCatcher));
+        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new ToggleCatcher(bunnyCatcher, arm));        
     }
 
     public void disabledInit(){
@@ -116,11 +114,21 @@ public class RobotContainer {
         // drivetrain.updateOdometry();
         i2cHandler.updatePitch();
         bunnyCatcher.updateAngle();
-        // arm.updateController();
+        arm.updateController();
 
-        // spin the spinners based on values from joystick Y axis (arm on left one, bunny on right one)
-        arm.spin(joyManips.getRawAxis(1) * 0.7);
-        bunnyCatcher.spin(joyManips.getRawAxis(5) * 0.25);
+        // spin bunny catcher in or out
+        if (joyManips.getRawButton(XboxController.Button.kLeftBumper.value)) {
+            bunnyCatcher.spin(+0.2);
+        } else if (joyManips.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.3) {
+            bunnyCatcher.spin(-0.2);
+        }
+
+        // spin berry catcher in or out
+        if (joyManips.getRawButton(XboxController.Button.kRightBumper.value)) {
+            arm.spin(+0.65);
+        } else if (joyManips.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.3) {
+            arm.spin(-0.65);
+        }
 
         // drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
     }

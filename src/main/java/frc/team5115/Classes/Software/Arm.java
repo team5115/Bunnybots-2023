@@ -12,12 +12,12 @@ import edu.wpi.first.math.controller.PIDController;
 public class Arm extends SubsystemBase{
     private static final double MIN_DEGREES = -180.0;
     private static final double TURN_PID_TOLERANCE = 0.0;
-    private static final double TURN_PID_KP = 0.04;
-    private static final double TURN_PID_KI = 0.004;
-    private static final double TURN_PID_KD = 0.0004;
+    private static final double TURN_PID_KP = 0.002;
+    private static final double TURN_PID_KI = 0.0;
+    private static final double TURN_PID_KD = 0.0;
     
     private final HardwareArm hardwareArm;
-    private Angle setpoint = new Angle(120);
+    private Angle setpoint;
 
     private PIDController turnController = new PIDController(TURN_PID_KP, TURN_PID_KI, TURN_PID_KD);
     private boolean isDeployed;
@@ -25,6 +25,7 @@ public class Arm extends SubsystemBase{
     public Arm(HardwareArm hardwareArm){
         this.hardwareArm = hardwareArm;
         turnController.setTolerance(TURN_PID_TOLERANCE);
+        setpoint = new Angle(100); // ! The starting setpoint for when the robot turns on
     }
 
     public Angle getSetpoint() {

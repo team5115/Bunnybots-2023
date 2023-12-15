@@ -31,7 +31,7 @@ public class HardwareArm extends SubsystemBase{
         armTurn = new CANSparkMax(10, MotorType.kBrushless);  
         armTurn.setIdleMode(IdleMode.kBrake);
         armTurn.setSmartCurrentLimit(80, 80);
-        armAngle = new Angle(90); //TODO: determine starting angle
+        armAngle = new Angle(120); // ! The approx real starting angle of the arm when the robot starts
         armTurn.setInverted(true);
     }
 
