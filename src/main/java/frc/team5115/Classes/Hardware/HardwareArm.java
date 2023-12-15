@@ -43,7 +43,7 @@ public class HardwareArm extends SubsystemBase{
         if(speed != speed) {
             speed = 0;
         }
-        armTurn.set(speed);
+        turnRaw(speed);
         // armTurn.setVoltage(Math.max(ff.calculate(getArmAngle().getRadians(-Math.PI), speed), -10));
     }
 

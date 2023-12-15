@@ -11,10 +11,12 @@ public class ToggleCatcher extends CommandBase{
     private final Timer timer;
     private final double timeToComplete = 1;
     private boolean endEarly = false;
+    private boolean careForArmState;
     
-    public ToggleCatcher(BunnyCatcher bunnyCatcher, Arm arm) {
+    public ToggleCatcher(BunnyCatcher bunnyCatcher, Arm arm, boolean careForArmState) {
         this.arm = arm;
         this.bunnyCatcher = bunnyCatcher;
+        this.careForArmState = careForArmState;
         timer = new Timer();
     }
 
@@ -25,7 +27,7 @@ public class ToggleCatcher extends CommandBase{
             bunnyCatcher.stow();
         } else {
             // stow if arm not deployed
-            if (arm.isDeployed()) {
+            if (arm.isDeployed() && careForArmState) {
                 endEarly = true;
             } else {
                 bunnyCatcher.deploy();

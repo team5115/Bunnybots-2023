@@ -63,9 +63,9 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm));
-        new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployArm(arm, bunnyCatcher));
-        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new ToggleCatcher(bunnyCatcher, arm));        
+        // new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm));
+        // new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployArm(arm, bunnyCatcher));
+        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new ToggleCatcher(bunnyCatcher, arm, false));        
     }
 
     public void disabledInit(){
@@ -113,14 +113,16 @@ public class RobotContainer {
     public void teleopPeriodic() {
         // drivetrain.updateOdometry();
         i2cHandler.updatePitch();
-        bunnyCatcher.updateAngle();
-        arm.updateController();
+        // bunnyCatcher.updateAngle();
+        // arm.updateController();
 
         // spin bunny catcher in or out
         if (joyManips.getRawButton(XboxController.Button.kLeftBumper.value)) {
-            bunnyCatcher.spin(+0.2);
-        } else if (joyManips.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.3) {
             bunnyCatcher.spin(-0.2);
+        } else if (joyManips.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.3) {
+            bunnyCatcher.spin(+0.2);
+        } else {
+            bunnyCatcher.spin(+0);
         }
 
         // spin berry catcher in or out
@@ -128,8 +130,12 @@ public class RobotContainer {
             arm.spin(+0.65);
         } else if (joyManips.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.3) {
             arm.spin(-0.65);
+        } else {
+            arm.spin(+0);
         }
 
-        // drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
+        arm.turnRaw(joyManips.getRawAxis(XboxController.Axis.kLeftY.value) * -0.3);
+
+        drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
     }
 }
