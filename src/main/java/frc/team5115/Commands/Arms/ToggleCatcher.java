@@ -31,11 +31,15 @@ public class ToggleCatcher extends CommandBase{
                 bunnyCatcher.deploy();
             }
         }
-    }
 
-    @Override
-    public void end(boolean interrupted) {
-        bunnyCatcher.stop();
+        // if (bunnyCatcher.isDeployed()) {
+        //     bunnyCatcher.stow();
+        // } else {
+        //     bunnyCatcher.deploy();
+        // }
+
+        timer.reset();
+        timer.start();
     }
 
     @Override

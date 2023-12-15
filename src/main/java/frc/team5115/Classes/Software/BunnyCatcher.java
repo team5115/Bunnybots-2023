@@ -1,10 +1,10 @@
 package frc.team5115.Classes.Software;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
-import frc.team5115.Classes.Hardware.HardwareBunnyCatcher.PistonState;
 
 public class BunnyCatcher extends SubsystemBase{
     // ! THese values are untuned
@@ -70,12 +70,12 @@ public class BunnyCatcher extends SubsystemBase{
 
     public void deploy() {
         isDeployed = true;
-        hardwareBunnyCatcher.setPistons(PistonState.In);
+        hardwareBunnyCatcher.setPistons(DoubleSolenoid.Value.kReverse);
     }
 
     public void stow() {
         isDeployed = false;
-        hardwareBunnyCatcher.setPistons(PistonState.Out);
+        hardwareBunnyCatcher.setPistons(DoubleSolenoid.Value.kForward);
     }
 
     public boolean isDeployed() {

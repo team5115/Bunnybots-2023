@@ -7,9 +7,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class HardwareBunnyCatcher {
-    public enum PistonState {
-        In, Out, Off
-    }
 
     static final double positionConversionFactor = 360.0 / 5.0; // 360 degrees per 1 catcher rev * 1 catcher rev per 5 motor revs
     protected final CANSparkMax roller;
@@ -23,22 +20,10 @@ public class HardwareBunnyCatcher {
         encoder.setPositionConversionFactor(positionConversionFactor);
     }
 
-    public void setPistons(PistonState state) {
-        DoubleSolenoid.Value value = convertPistonStateToDoubleSolenoidValue(state);
+    public void setPistons(DoubleSolenoid.Value value) {
         leftSolenoid.set(value);
         rightSolenoid.set(value);
-    }
-
-    private DoubleSolenoid.Value convertPistonStateToDoubleSolenoidValue(PistonState state) {
-        switch (state) {
-            case In:
-                return DoubleSolenoid.Value.kReverse;
-            case Out:
-                return DoubleSolenoid.Value.kForward;
-            case Off:
-            default:
-                return DoubleSolenoid.Value.kOff;
-        }
+        System.out.println("Pistons set to " + value);
     }
 
     public double getPosition() {

@@ -29,11 +29,6 @@ public class DeployCatcher extends CommandBase{
     }
 
     @Override
-    public void end(boolean interrupted) {
-        bunnyCatcher.stop();
-    }
-
-    @Override
     public boolean isFinished() {
         if (endEarly) return true;
         // confirm that PID is done
