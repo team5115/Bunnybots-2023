@@ -22,6 +22,8 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         else{
             denToYardInside();
         }
+
+        // addCommands(new DriveTimed(drivetrain, 1, 0.5));
     }
 
     private void denToYardOutside(){

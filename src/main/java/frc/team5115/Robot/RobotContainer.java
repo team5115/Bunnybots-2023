@@ -27,9 +27,9 @@ public class RobotContainer {
     private final BunnyCatcher bunnyCatcher;
     private final GenericEntry rookie;
     private final GenericEntry outsidePath;
-    private final GenericEntry testingValue1;
-    private final GenericEntry testingValue2;
-    private final GenericEntry testingValue3;
+    // private final GenericEntry testingValue1;
+    // private final GenericEntry testingValue2;
+    // private final GenericEntry testingValue3;
     private final I2CHandler i2cHandler;
     private final NAVx navx;
     private final Arm arm;
@@ -40,9 +40,9 @@ public class RobotContainer {
         rookie = shuffleboardTab.add("Rookie?", false).getEntry();
         outsidePath = shuffleboardTab.add("Do Outside Path?", false).getEntry();
         
-        testingValue1 = shuffleboardTab.add("test #1 oooh", 0).getEntry();
-        testingValue2 = shuffleboardTab.add("test #2 oooh", 0).getEntry();
-        testingValue3 = shuffleboardTab.add("test #3 oooh", 0).getEntry();
+        // testingValue1 = shuffleboardTab.add("test #1", 0).getEntry();
+        // testingValue2 = shuffleboardTab.add("test #2", 0).getEntry();
+        // testingValue3 = shuffleboardTab.add("test #3", 0).getEntry();
 
         joyDrive = new Joystick(0);
         joyManips = new Joystick(1);
@@ -96,14 +96,13 @@ public class RobotContainer {
     }
 
     public void autoPeriod() {
-        i2cHandler.updatePitch();
-        bunnyCatcher.updateAngle();
+        // i2cHandler.updatePitch();
+        // bunnyCatcher.updateAngle();
         drivetrain.updateOdometry();
-        arm.updateController();
+        // arm.updateController();
     }
 
     public void startTeleop(){
-        // drivetrain.init();
         if(autoCommandGroup != null) autoCommandGroup.cancel();
         
         System.out.println("Starting teleop");
@@ -112,7 +111,7 @@ public class RobotContainer {
 
     public void teleopPeriodic() {
         // drivetrain.updateOdometry();
-        i2cHandler.updatePitch();
+        // i2cHandler.updatePitch();
         // bunnyCatcher.updateAngle();
         // arm.updateController();
 
