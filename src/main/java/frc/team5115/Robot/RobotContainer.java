@@ -5,26 +5,20 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team5115.Classes.Accessory.I2CHandler;
 import frc.team5115.Classes.Hardware.HardwareArm;
-import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
 import frc.team5115.Classes.Hardware.HardwareDrivetrain;
 import frc.team5115.Classes.Hardware.NAVx;
 import frc.team5115.Classes.Software.Arm;
-import frc.team5115.Classes.Software.BunnyCatcher;
 import frc.team5115.Classes.Software.Drivetrain;
 import frc.team5115.Classes.Software.PhotonVision;
-import frc.team5115.Commands.Arms.DeployArm;
-import frc.team5115.Commands.Arms.StowArm;
-import frc.team5115.Commands.Arms.ToggleCatcher;
 import frc.team5115.Commands.Auto.AutoCommandGroup;
 
 public class RobotContainer {
     private final Joystick joyDrive;
     private final Joystick joyManips;
     private final Drivetrain drivetrain;
-    private final BunnyCatcher bunnyCatcher;
+    // private final BunnyCatcher bunnyCatcher;
     private final GenericEntry rookie;
     private final GenericEntry outsidePath;
     // private final GenericEntry testingValue1;
@@ -53,8 +47,8 @@ public class RobotContainer {
         PhotonVision photonVision = new PhotonVision();
         drivetrain = new Drivetrain(hardwareDrivetrain, photonVision, navx, outsidePath);
         
-        HardwareBunnyCatcher hardwareBunnyCatcher = new HardwareBunnyCatcher();
-        bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
+        // HardwareBunnyCatcher hardwareBunnyCatcher = new HardwareBunnyCatcher();
+        // bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
         
         HardwareArm hardwareArm = new HardwareArm(navx, i2cHandler);
         arm = new Arm(hardwareArm);
@@ -65,7 +59,7 @@ public class RobotContainer {
     public void configureButtonBindings() {
         // new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm));
         // new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployArm(arm, bunnyCatcher));
-        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new ToggleCatcher(bunnyCatcher, arm, false));        
+        // new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new ToggleCatcher(bunnyCatcher, arm, false));        
     }
 
     public void disabledInit(){
@@ -91,7 +85,7 @@ public class RobotContainer {
         drivetrain.init();
 
         boolean doOutsidePath = outsidePath.getBoolean(false);
-        autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath, arm, bunnyCatcher);
+        autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath);
         autoCommandGroup.schedule();
     }
 
@@ -115,14 +109,14 @@ public class RobotContainer {
         // bunnyCatcher.updateAngle();
         // arm.updateController();
 
-        // spin bunny catcher in or out
-        if (joyManips.getRawButton(XboxController.Button.kLeftBumper.value)) {
-            bunnyCatcher.spin(-0.2);
-        } else if (joyManips.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.3) {
-            bunnyCatcher.spin(+0.2);
-        } else {
-            bunnyCatcher.spin(+0);
-        }
+        // // spin bunny catcher in or out
+        // if (joyManips.getRawButton(XboxController.Button.kLeftBumper.value)) {
+        //     bunnyCatcher.spin(-0.2);
+        // } else if (joyManips.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.3) {
+        //     bunnyCatcher.spin(+0.2);
+        // } else {
+        //     bunnyCatcher.spin(+0);
+        // }
 
         // spin berry catcher in or out
         if (joyManips.getRawButton(XboxController.Button.kRightBumper.value)) {
