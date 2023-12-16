@@ -43,12 +43,6 @@ public class Constants{
     public static final double kA = 0.28613;
 
     public static final double DRIVE_MOTOR_MAX_VOLTAGE = 12;
-    // distance between the left wheels and the right wheels in meters
-    // 0.70 for wide, 0.57 for long
-    public static final double TRACKING_WIDTH_METERS = 0.70;
-    // distance between the front and back axles in meters
-    // UNKOWN!!!!! somebody needs to measure this. 0.58 is ARBITRARY
-    public static final double TRACKING_LENGTH_METERS = 0.58;
 
     public static final double TARGET_ANGLE = 1;
 
@@ -76,15 +70,15 @@ public class Constants{
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(23);
+    public static final double kTrackWidth = Units.inchesToMeters(23.75);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(23);
+    public static final double kWheelBase = Units.inchesToMeters(23.75);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2), // front left
+        new Translation2d(kWheelBase / 2, kTrackWidth / -2), // front right
+        new Translation2d(kWheelBase / -2, kTrackWidth / 2), // back left
+        new Translation2d(kWheelBase / -2, kTrackWidth / -2)); // back right
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
@@ -115,7 +109,7 @@ public class Constants{
         public static final boolean TurningEncoderInverted = true;
     
         // Calculations required for driving motor conversion factors and feed forward
-        public static final double WheelDiameterMeters = 0.0762;
+        public static final double WheelDiameterMeters = Units.inchesToMeters(3);
         public static final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
         public static final double DrivingMotorReduction = (45.0 * 22) / (DrivingMotorPinionTeeth * 15);
