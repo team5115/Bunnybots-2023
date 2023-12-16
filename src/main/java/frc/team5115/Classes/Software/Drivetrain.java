@@ -77,7 +77,7 @@ public class Drivetrain extends SubsystemBase {
             turn *= 0.2;
             forward *= 0.2;
         }
-        hardwareDrivetrain.drive(right, forward, turn, false, false);
+        hardwareDrivetrain.drive(forward, right, turn, false, false);
     }
 
 	/**

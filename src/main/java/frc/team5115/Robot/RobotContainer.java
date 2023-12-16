@@ -21,6 +21,7 @@ public class RobotContainer {
     // private final BunnyCatcher bunnyCatcher;
     private final GenericEntry rookie;
     private final GenericEntry outsidePath;
+    private final GenericEntry doAuto;
     // private final GenericEntry testingValue1;
     // private final GenericEntry testingValue2;
     // private final GenericEntry testingValue3;
@@ -33,7 +34,7 @@ public class RobotContainer {
         ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("SmartDashboard");
         rookie = shuffleboardTab.add("Rookie?", false).getEntry();
         outsidePath = shuffleboardTab.add("Do Outside Path?", false).getEntry();
-        
+        doAuto = shuffleboardTab.add("Do auto at all?", false).getEntry();
         // testingValue1 = shuffleboardTab.add("test #1", 0).getEntry();
         // testingValue2 = shuffleboardTab.add("test #2", 0).getEntry();
         // testingValue3 = shuffleboardTab.add("test #3", 0).getEntry();
@@ -84,8 +85,9 @@ public class RobotContainer {
         drivetrain.stop();
         drivetrain.init();
 
-        boolean doOutsidePath = outsidePath.getBoolean(false);
-        autoCommandGroup = new AutoCommandGroup(drivetrain, doOutsidePath);
+        autoCommandGroup = new AutoCommandGroup(drivetrain,
+            outsidePath.getBoolean(false),
+            doAuto.getBoolean(true));
         autoCommandGroup.schedule();
     }
 

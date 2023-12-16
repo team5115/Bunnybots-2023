@@ -7,17 +7,19 @@ import frc.team5115.Classes.Software.Drivetrain;
 public class AutoCommandGroup extends SequentialCommandGroup {
     final Drivetrain drivetrain;
     
-    public AutoCommandGroup(Drivetrain drivetrain, boolean doOutsidePath){
+    public AutoCommandGroup(Drivetrain drivetrain, boolean doOutsidePath, boolean actuallyRun){
         this.drivetrain = drivetrain;
 
-        if(doOutsidePath){
-            denToYardOutside();
-        }
-        else{
-            denToYardInside();
-        }
+        if (!actuallyRun) return;
 
-        // addCommands(new DriveTimed(drivetrain, 1, 0.5));
+        // if(doOutsidePath){
+        //     denToYardOutside();
+        // }
+        // else{
+        //     denToYardInside();
+        // }
+
+        addCommands(new DriveTimed(drivetrain, 1, 0.5));
     }
 
     private void denToYardOutside(){
