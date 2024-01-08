@@ -12,18 +12,20 @@ import edu.wpi.first.math.controller.PIDController;
 public class Arm extends SubsystemBase{
     private static final double MIN_DEGREES = -180.0;
     private static final double TURN_PID_TOLERANCE = 0.0;
-    private static final double TURN_PID_KP = 0.04;
+    private static final double TURN_PID_KP = 0.002;
     private static final double TURN_PID_KI = 0.0;
-    private static final double TURN_PID_KD = 0.0004;
+    private static final double TURN_PID_KD = 0.0;
     
     private final HardwareArm hardwareArm;
-    private Angle setpoint = new Angle(-90);
+    private Angle setpoint;
 
     private PIDController turnController = new PIDController(TURN_PID_KP, TURN_PID_KI, TURN_PID_KD);
+    private boolean isDeployed;
 
     public Arm(HardwareArm hardwareArm){
         this.hardwareArm = hardwareArm;
         turnController.setTolerance(TURN_PID_TOLERANCE);
+        setpoint = new Angle(100); // ! The starting setpoint for when the robot turns on
     }
 
     public Angle getSetpoint() {
@@ -60,10 +62,15 @@ public class Arm extends SubsystemBase{
      */
     public boolean updateController(){
         final double pidOutput = turnController.calculate(getAngle().getDegrees(MIN_DEGREES), setpoint.getDegrees(MIN_DEGREES));
+        System.out.println("Setpoint: " + setpoint.getDegrees(MIN_DEGREES) + " current angle: "+ getAngle().getDegrees(MIN_DEGREES) + " pid: " + pidOutput);
         
         boolean atSetpoint = turnController.atSetpoint();
         if (!atSetpoint) hardwareArm.setTurn(pidOutput);
         return atSetpoint;
+    }
+
+    public void turnRaw(double speed) {
+        hardwareArm.turnRaw(speed);
     }
 
     public boolean atSetpoint() {
@@ -82,15 +89,21 @@ public class Arm extends SubsystemBase{
         return hardwareArm.getArmAngle();
     }
 
-    public void spinIn() {
-        hardwareArm.spinGrabbers(+0.2);
+    public void spin(double speed) {
+        hardwareArm.spinGrabbers(speed);
     }
 
-    public void spinOut() {
-        hardwareArm.spinGrabbers(-0.2);
+    public void deploy() {
+        isDeployed = true;
+        setpoint.angle = 5;
     }
 
-    public void spinStop() {
-        hardwareArm.spinGrabbers(+0.0);
+    public void stow() {
+        isDeployed = false;
+        setpoint.angle = 90;
+    }
+
+    public boolean isDeployed() {
+        return isDeployed;
     }
 }

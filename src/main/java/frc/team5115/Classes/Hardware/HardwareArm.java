@@ -31,7 +31,8 @@ public class HardwareArm extends SubsystemBase{
         armTurn = new CANSparkMax(10, MotorType.kBrushless);  
         armTurn.setIdleMode(IdleMode.kBrake);
         armTurn.setSmartCurrentLimit(80, 80);
-        armAngle = new Angle(90); //TODO determine stowed angle
+        armAngle = new Angle(120); // ! The approx real starting angle of the arm when the robot starts
+        armTurn.setInverted(true);
     }
 
     public void spinGrabbers(double speedNormalized) {
@@ -42,7 +43,12 @@ public class HardwareArm extends SubsystemBase{
         if(speed != speed) {
             speed = 0;
         }
-        armTurn.setVoltage(Math.max(ff.calculate(getArmAngle().getRadians(-Math.PI), 1.5*speed), -10));
+        turnRaw(speed);
+        // armTurn.setVoltage(Math.max(ff.calculate(getArmAngle().getRadians(-Math.PI), speed), -10));
+    }
+
+    public void turnRaw(double speed) {
+        armTurn.set(speed);
     }
 
     public void stop(){

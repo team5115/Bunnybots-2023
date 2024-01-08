@@ -1,12 +1,13 @@
 package frc.team5115.Classes.Software;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareBunnyCatcher;
-import frc.team5115.Classes.Hardware.HardwareBunnyCatcher.PistonState;
 
 public class BunnyCatcher extends SubsystemBase{
+    // ! THese values are untuned
     static final double kP = 0.1;
     static final double kI = 0.0;
     static final double kD = 0.0;
@@ -15,6 +16,8 @@ public class BunnyCatcher extends SubsystemBase{
     private final HardwareBunnyCatcher hardwareBunnyCatcher;
     final PIDController pidController;
     final Angle currentAngle;
+
+    private boolean isDeployed;
 
     public BunnyCatcher(HardwareBunnyCatcher hardwareBunnyCatcher) {
         this.hardwareBunnyCatcher = hardwareBunnyCatcher;
@@ -61,18 +64,21 @@ public class BunnyCatcher extends SubsystemBase{
     }
 
     public Angle getAngle() {
+        updateAngle();
         return currentAngle;
     }
 
-    public void deployCatcher() {
-        hardwareBunnyCatcher.setPistons(PistonState.In);
+    public void deploy() {
+        isDeployed = true;
+        hardwareBunnyCatcher.setPistons(DoubleSolenoid.Value.kReverse);
     }
 
-    public void stowCatcher() {
-        hardwareBunnyCatcher.setPistons(PistonState.Out);
+    public void stow() {
+        isDeployed = false;
+        hardwareBunnyCatcher.setPistons(DoubleSolenoid.Value.kForward);
     }
 
-    public void pistonOff() {
-        hardwareBunnyCatcher.setPistons(PistonState.Off);
+    public boolean isDeployed() {
+        return isDeployed;
     }
 }
