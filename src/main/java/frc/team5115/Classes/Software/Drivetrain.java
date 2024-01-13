@@ -64,20 +64,31 @@ public class Drivetrain extends SubsystemBase {
 	 * Sets the encoder values to 0.
 	 */
     public void resetEncoders() {
+        navx.resetNAVx();
         hardwareDrivetrain.resetEncoders();
     }
     
     public void SwerveDrive(double forward, double turn, double right, boolean rookieMode){
+
+        if(Math.abs(forward)< 0.1){
+            forward = 0;
+        }
+        if(Math.abs(turn)< 0.1){
+            turn = 0;
+        }
+        if(Math.abs(right)< 0.1){
+            right = 0;
+        }        
         if(rookieMode){
             right *= 0.1;
             turn *= 0.1;
-            forward *= 0.1;
+            forward *= -0.1;
         }else{
             right *= 0.2;
             turn *= 0.2;
-            forward *= 0.2;
+            forward *= -0.2;
         }
-        hardwareDrivetrain.drive(forward, right, turn, false, false);
+        hardwareDrivetrain.drive(forward, right, turn, true, false);
     }
 
 	/**
