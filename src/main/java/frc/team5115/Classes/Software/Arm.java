@@ -100,7 +100,7 @@ public class Arm extends SubsystemBase{
 
     public void stow() {
         isDeployed = false;
-        setpoint.angle = 90;
+        setpoint.angle = 110;
     }
 
     public boolean isDeployed() {

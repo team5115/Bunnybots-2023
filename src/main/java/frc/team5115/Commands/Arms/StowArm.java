@@ -5,7 +5,6 @@ import frc.team5115.Classes.Software.Arm;
 
 public class StowArm extends Command{
     private final Arm arm;
-    private boolean endEarly = false;
     
     public StowArm(Arm arm) {
         this.arm = arm;
@@ -24,8 +23,7 @@ public class StowArm extends Command{
 
     @Override
     public boolean isFinished() {
-        if (endEarly) return true;
-        // confirm that PID is done
+
         return arm.atSetpoint();
     }
 }

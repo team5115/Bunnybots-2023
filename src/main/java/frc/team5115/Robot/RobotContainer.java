@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.team5115.Classes.Accessory.I2CHandler;
 import frc.team5115.Classes.Hardware.HardwareArm;
 import frc.team5115.Classes.Hardware.HardwareDrivetrain;
@@ -12,6 +13,8 @@ import frc.team5115.Classes.Hardware.NAVx;
 import frc.team5115.Classes.Software.Arm;
 import frc.team5115.Classes.Software.Drivetrain;
 import frc.team5115.Classes.Software.PhotonVision;
+import frc.team5115.Commands.Arms.DeployArm;
+import frc.team5115.Commands.Arms.StowArm;
 import frc.team5115.Commands.Auto.AutoCommandGroup;
 
 public class RobotContainer {
@@ -58,9 +61,8 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        // new JoystickButton(joyManips, XboxController.Button.kY.value).onTrue(new StowArm(arm));
-        // new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployArm(arm, bunnyCatcher));
-        // new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new ToggleCatcher(bunnyCatcher, arm, false));        
+        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new StowArm(arm));
+        new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployArm(arm));
     }
 
     public void disabledInit(){
