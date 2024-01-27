@@ -2,7 +2,6 @@ package frc.team5115.Robot;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -119,7 +118,6 @@ public class RobotContainer {
         }
 
         arm.turnRaw(joyManips.getRawAxis(XboxController.Axis.kLeftY.value) * -0.3);
-        System.out.println("voltage: " + arm.getPercent() * RobotController.getBatteryVoltage());
 
         drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
     }

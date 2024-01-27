@@ -65,7 +65,10 @@ public class Arm extends SubsystemBase{
         System.out.println("Setpoint: " + setpoint.getDegrees(MIN_DEGREES) + " current angle: "+ getAngle().getDegrees(MIN_DEGREES) + " pid: " + pidOutput);
         
         boolean atSetpoint = turnController.atSetpoint();
-        if (!atSetpoint) hardwareArm.setTurn(pidOutput);
+        if (!atSetpoint) {
+            // hardwareArm.setTurn(pidOutput);
+            hardwareArm.turnRaw(pidOutput);
+        }
         return atSetpoint;
     }
 
