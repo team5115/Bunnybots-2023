@@ -74,6 +74,9 @@ public class RobotContainer {
     }
 
     public void testPeriodic() {
+        i2cHandler.updatePitch();
+        System.out.print("BNO Pitch: " + i2cHandler.getPitch() + " | ");
+        System.out.println("Arm angle: " + arm.getAngle());
     }
 
     public void startAuto(){
@@ -105,8 +108,8 @@ public class RobotContainer {
     public void teleopPeriodic() {
 
         // drivetrain.updateOdometry();
-        // i2cHandler.updatePitch();
-        // arm.updateController();
+        i2cHandler.updatePitch();
+        arm.updateController();
 
         // spin berry catcher in or out
         if (joyManips.getRawButton(XboxController.Button.kRightBumper.value)) {
@@ -117,7 +120,7 @@ public class RobotContainer {
             arm.spin(+0);
         }
 
-        arm.turnRaw(joyManips.getRawAxis(XboxController.Axis.kLeftY.value) * -0.3);
+        // arm.turnRaw(joyManips.getRawAxis(XboxController.Axis.kLeftY.value) * -0.3);
 
         drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
     }
