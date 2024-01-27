@@ -12,9 +12,7 @@ public class DeployArm extends Command{
 
     @Override
     public void initialize() {
-        // if the bunny catcher is deployed, then you are not allowed to deploy the arm
         arm.deploy();
-
     }
 
     @Override
@@ -24,8 +22,6 @@ public class DeployArm extends Command{
 
     @Override
     public boolean isFinished() {
-
-        // confirm that PID is done
         return arm.atSetpoint();
     }
 }

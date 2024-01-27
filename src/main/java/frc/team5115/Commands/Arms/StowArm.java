@@ -12,7 +12,6 @@ public class StowArm extends Command{
 
     @Override
     public void initialize() {
-        // you can stow with abandon :)
         arm.stow();
     }
 
@@ -23,7 +22,6 @@ public class StowArm extends Command{
 
     @Override
     public boolean isFinished() {
-
         return arm.atSetpoint();
     }
 }

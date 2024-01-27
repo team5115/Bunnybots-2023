@@ -2,6 +2,7 @@ package frc.team5115.Robot;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -21,7 +22,6 @@ public class RobotContainer {
     private final Joystick joyDrive;
     private final Joystick joyManips;
     private final Drivetrain drivetrain;
-    // private final BunnyCatcher bunnyCatcher;
     private final GenericEntry rookie;
     private final GenericEntry outsidePath;
     private final GenericEntry doAuto;
@@ -50,9 +50,6 @@ public class RobotContainer {
         HardwareDrivetrain hardwareDrivetrain = new HardwareDrivetrain(navx);
         PhotonVision photonVision = new PhotonVision();
         drivetrain = new Drivetrain(hardwareDrivetrain, photonVision, navx, outsidePath);
-        
-        // HardwareBunnyCatcher hardwareBunnyCatcher = new HardwareBunnyCatcher();
-        // bunnyCatcher = new BunnyCatcher(hardwareBunnyCatcher);
         
         HardwareArm hardwareArm = new HardwareArm(navx, i2cHandler);
         arm = new Arm(hardwareArm);
@@ -95,7 +92,6 @@ public class RobotContainer {
 
     public void autoPeriod() {
         // i2cHandler.updatePitch();
-        // bunnyCatcher.updateAngle();
         drivetrain.updateOdometry();
         // arm.updateController();
     }
@@ -111,17 +107,7 @@ public class RobotContainer {
 
         // drivetrain.updateOdometry();
         // i2cHandler.updatePitch();
-        // bunnyCatcher.updateAngle();
         // arm.updateController();
-
-        // // spin bunny catcher in or out
-        // if (joyManips.getRawButton(XboxController.Button.kLeftBumper.value)) {
-        //     bunnyCatcher.spin(-0.2);
-        // } else if (joyManips.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.3) {
-        //     bunnyCatcher.spin(+0.2);
-        // } else {
-        //     bunnyCatcher.spin(+0);
-        // }
 
         // spin berry catcher in or out
         if (joyManips.getRawButton(XboxController.Button.kRightBumper.value)) {
@@ -133,6 +119,7 @@ public class RobotContainer {
         }
 
         arm.turnRaw(joyManips.getRawAxis(XboxController.Axis.kLeftY.value) * -0.3);
+        System.out.println("voltage: " + arm.getPercent() * RobotController.getBatteryVoltage());
 
         drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
     }

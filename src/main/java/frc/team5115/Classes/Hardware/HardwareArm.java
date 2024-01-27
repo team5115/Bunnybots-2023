@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Accessory.I2CHandler;
@@ -61,6 +62,10 @@ public class HardwareArm extends SubsystemBase{
     
     public boolean getFault(CANSparkMax.FaultID f){
        return armTurn.getFault(f);
+    }
+
+    public double getPercent() {
+        return armTurn.get();
     }
     
     /**

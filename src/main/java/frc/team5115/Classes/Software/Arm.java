@@ -77,6 +77,10 @@ public class Arm extends SubsystemBase{
         return turnController.atSetpoint();
     }
 
+    public double getPercent() {
+        return hardwareArm.getPercent();
+    }
+
     public boolean getFault(CANSparkMax.FaultID f){
         return hardwareArm.getFault(f);
     }
