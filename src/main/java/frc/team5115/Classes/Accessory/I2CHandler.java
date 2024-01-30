@@ -16,7 +16,7 @@ public class I2CHandler extends SubsystemBase {
     static final byte yGravAddress = 0x30;
     static final byte zGravAddress = 0x32;
     static final byte deviceAddress = 0x28;
-    static final Port port = Port.kMXP;
+    static final Port port = Port.kOnboard;
     static final double PITCH_OFFSET = 0;
 
     private final I2C i2c;
@@ -67,7 +67,7 @@ public class I2CHandler extends SubsystemBase {
         final boolean aborted = i2c.read(registerAddress, count, buffer);
 
         if (aborted) {
-            System.out.println("Failed to read from BNO055");
+           // System.out.println("Failed to read from BNO055");
             return defaultValue;
         }
         return combineBytes(buffer);

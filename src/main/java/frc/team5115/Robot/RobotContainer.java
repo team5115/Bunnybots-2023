@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Accessory.I2CHandler;
 import frc.team5115.Classes.Hardware.HardwareArm;
 import frc.team5115.Classes.Hardware.HardwareDrivetrain;
@@ -57,8 +58,8 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new StowArm(arm));
-        new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployArm(arm));
+      //  new JoystickButton(joyManips, XboxController.Button.kB.value).onTrue(new StowArm(arm));
+      //  new JoystickButton(joyManips, XboxController.Button.kA.value).onTrue(new DeployArm(arm));
     }
 
     public void disabledInit(){
@@ -71,12 +72,15 @@ public class RobotContainer {
     }
 
     public void startTest() {
+        arm.setSetpoint(new Angle(92));
     }
 
     public void testPeriodic() {
         i2cHandler.updatePitch();
-        System.out.print("BNO Pitch: " + i2cHandler.getPitch() + " | ");
-        System.out.println("Arm angle: " + arm.getAngle());
+        arm.updateController();
+     //   System.out.print("BNO Pitch: " + i2cHandler.getPitch() + " | ");
+        //System.out.println("Arm angle: " + arm.getAngle());
+
     }
 
     public void startAuto(){
@@ -108,8 +112,8 @@ public class RobotContainer {
     public void teleopPeriodic() {
 
         // drivetrain.updateOdometry();
-        i2cHandler.updatePitch();
-        arm.updateController();
+     //   i2cHandler.updatePitch();
+     //   arm.updateController();
 
         // spin berry catcher in or out
         if (joyManips.getRawButton(XboxController.Button.kRightBumper.value)) {
@@ -120,7 +124,7 @@ public class RobotContainer {
             arm.spin(+0);
         }
 
-        // arm.turnRaw(joyManips.getRawAxis(XboxController.Axis.kLeftY.value) * -0.3);
+        arm.turnRaw(joyManips.getRawAxis(XboxController.Axis.kLeftY.value) * -0.3);
 
         drivetrain.SwerveDrive(-joyDrive.getRawAxis(1), joyDrive.getRawAxis(4), joyDrive.getRawAxis(0), rookie.getBoolean(false));
     }

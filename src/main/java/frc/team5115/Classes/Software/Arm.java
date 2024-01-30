@@ -1,10 +1,11 @@
 package frc.team5115.Classes.Software;
 
 import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Classes.Accessory.Angle;
 import frc.team5115.Classes.Hardware.HardwareArm;
-import edu.wpi.first.math.controller.PIDController;
 
 /**
  * The arm subsystem. Provides methods for controlling and getting information about the arm.
@@ -12,8 +13,8 @@ import edu.wpi.first.math.controller.PIDController;
 public class Arm extends SubsystemBase{
     private static final double MIN_DEGREES = -180.0;
     private static final double TURN_PID_TOLERANCE = 0.0;
-    private static final double TURN_PID_KP = 0.002;
-    private static final double TURN_PID_KI = 0.0;
+    private static final double TURN_PID_KP = 0.001;
+    private static final double TURN_PID_KI = 0;
     private static final double TURN_PID_KD = 0.0;
     
     private final HardwareArm hardwareArm;
@@ -25,7 +26,7 @@ public class Arm extends SubsystemBase{
     public Arm(HardwareArm hardwareArm){
         this.hardwareArm = hardwareArm;
         turnController.setTolerance(TURN_PID_TOLERANCE);
-        setpoint = new Angle(100); // ! The starting setpoint for when the robot turns on
+        setpoint = new Angle(91); // ! The starting setpoint for when the robot turns on
     }
 
     public Angle getSetpoint() {
@@ -62,14 +63,16 @@ public class Arm extends SubsystemBase{
      */
     public boolean updateController(){
         final double pidOutput = turnController.calculate(getAngle().getDegrees(MIN_DEGREES), setpoint.getDegrees(MIN_DEGREES));
-        System.out.println("Setpoint: " + setpoint.getDegrees(MIN_DEGREES) + " current angle: "+ getAngle().getDegrees(MIN_DEGREES) + " pid: " + pidOutput);
+       // System.out.println("Setpoint: " + setpoint.getDegrees(MIN_DEGREES) + " current angle: "+ getAngle().getDegrees(MIN_DEGREES) + " pid: " + pidOutput);
         
         boolean atSetpoint = turnController.atSetpoint();
         if (!atSetpoint) {
             // hardwareArm.setTurn(pidOutput);
-            hardwareArm.turnRaw(pidOutput);
+            hardwareArm.turnRaw(-pidOutput);
         }
+        
         return atSetpoint;
+
     }
 
     public void turnRaw(double speed) {
@@ -102,12 +105,12 @@ public class Arm extends SubsystemBase{
 
     public void deploy() {
         isDeployed = true;
-        setpoint.angle = 5;
+        setpoint.angle = 91;
     }
 
     public void stow() {
         isDeployed = false;
-        setpoint.angle = 110;
+        setpoint.angle = 223;
     }
 
     public boolean isDeployed() {
